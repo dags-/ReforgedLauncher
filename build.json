@@ -6,6 +6,9 @@
   "output": ".builds",
   "setup": ["rice embed-go"],
   "targets": {
+    "darwin/amd64": {
+      "compress": true
+    },
     "windows/amd64": {
       "compress": false,
       "generate": ["goversioninfo -64"],

@@ -1,9 +1,11 @@
 package minecraft
 
 import (
+	"github.com/Conquest-Reforged/ReforgedLauncher/modpack"
+	"github.com/Conquest-Reforged/ReforgedLauncher/utils/files"
+	"github.com/Conquest-Reforged/ReforgedLauncher/utils/tasks"
 	"os/exec"
 
-	"github.com/Conquest-Reforged/ReforgedLauncher/instance/repo"
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/progress"
 )
 
@@ -16,11 +18,11 @@ func (m *Meta) platform() *AppLink {
 }
 
 func install(file string, listener progress.Listener) (string, error) {
-	out := tasks.RelDir(file, executable())
-	progress.Status("Extracting launcher")
+	out := files.RelDir(file, executable())
+	listener.GlobalStatus("Extracting launcher")
 	return out, tasks.Unzip(file, out, listener)
 }
 
-func launch(path string, r *repo.Repo) *exec.Cmd {
-	return exec.Command("open", path, "--workDir", r.GameDir)
+func launch(path string, i *modpack.Installation) *exec.Cmd {
+	return exec.Command("open", path, "--workDir", i.GameDir)
 }
