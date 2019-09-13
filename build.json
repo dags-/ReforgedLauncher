@@ -1,0 +1,15 @@
+{
+  "name": "ReforgedLauncher",
+  "version": "1.0.0",
+  "identifier": "me.dags.reforged",
+  "icon": ".graphics/icon.png",
+  "output": ".builds",
+  "setup": ["rice embed-go"],
+  "targets": {
+    "windows/amd64": {
+      "compress": false,
+      "generate": ["goversioninfo -64"],
+      "flags": ["-H=windowsgui -s -w"]
+    }
+  }
+}

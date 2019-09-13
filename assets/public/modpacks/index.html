@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../assets/style/style.css">
+    <link rel="stylesheet" href="../assets/style/theme.css">
+    <link rel="stylesheet" href="../assets/style/widgets.css">
+    <link rel="stylesheet" href="../assets/style/layout.css">
+    <link rel="shortcut icon" href="../assets/image/icon.ico">
+    <script src="../assets/script/script.js"></script>
+    <script src="../assets/script/render.js"></script>
+
+    <link rel="stylesheet" href="./style.css">
+    <script src="./script.js"></script>
+</head>
+
+<body class="background">
+
+<div class="layout-container center-v center-h theme">
+    <div class="layout-content">
+        <div class="layout-header theme-header">
+            Modpacks
+        </div>
+        <div class="layout-scroll-pane theme-shadow">
+            <div id="modpacks" class="layout-body theme-content">
+
+            </div>
+            <div class="layout-footer theme-header">
+                <div class="button-container">
+                    <input id="back" type="button" class="secondary" value="Back">
+                </div>
+                <div class="button-container">
+                    <input id="add" type="button" class="secondary" value="Add Pack">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+<script>
+    get("/api/modpacks", function(result) {
+        renderModpacks(result["data"]);
+    });
+</script>
+</html>

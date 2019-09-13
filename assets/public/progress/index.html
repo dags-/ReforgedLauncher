@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../assets/style/style.css">
+    <link rel="shortcut icon" href="../assets/image/icon.ico">
+    <script src="./script.js"></script>
+    <script src="../assets/script/script.js"></script>
+    <script src="../assets/script/render.js"></script>
+</head>
+<body class="background">
+
+<div class="upper">
+    <div class="logo logo-size"></div>
+</div>
+
+<div class="status"><span id="status"></span></div>
+<div class="status message"><span id="message"></span></div>
+<progress id="overall" max="1.0"></progress>
+<progress id="task" max="1.0" class="hidden"></progress>
+
+</body>
+<script>
+    get("/api/" + path())
+</script>
+</html>

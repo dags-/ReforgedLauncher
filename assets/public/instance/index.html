@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../assets/style/style.css">
+    <link rel="stylesheet" href="../assets/style/widgets.css">
+    <link rel="stylesheet" href="../assets/style/theme.css">
+    <link rel="stylesheet" href="../assets/style/layout.css">
+    <link rel="shortcut icon" href="../assets/image/icon.ico">
+    <script src="../assets/script/script.js"></script>
+    <script src="../assets/script/render.js"></script>
+
+    <script src="./script.js"></script>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body class="background">
+
+<div class="layout-container">
+    <div class="layout-content theme">
+        <div id="header" class="layout-header theme-header">
+
+        </div>
+        <div id="scroll-pane" class="layout-scroll-pane theme-shadow theme-content">
+            <div id="options" class="layout-body">
+
+            </div>
+        </div>
+        <div id="footer" class="layout-footer theme-header">
+            <div class="button-container">
+                <input id="back" type="button" class="secondary" value="Back">
+            </div>
+            <div class="button-container">
+                <input id="delete" type="button" class="warning" value="Remove">
+            </div>
+            <div class="button-container">
+                <input id="launch" type="button" class="primary" value="Launch">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function back() {
+        nav("/home");
+    }
+
+    function add() {
+        document.body.appendChild(inputDialog("", function(text) {
+            post("/api/modpacks", JSON.stringify(text), function(result) {
+                if (result.success) {
+                    nav("/modpacks")
+                } else {
+                    alert(result["data"])
+                }
+            });
+        }));
+    }
+
+    get("/api/instance/" + path(), function(result) {
+        renderSettings(result["data"]);
+    });
+</script>
+
+</body>
+</html>

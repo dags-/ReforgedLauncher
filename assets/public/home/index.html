@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../assets/style/style.css">
+    <link rel="stylesheet" href="../assets/style/theme.css">
+    <link rel="stylesheet" href="../assets/style/layout.css">
+    <link rel="shortcut icon" href="../assets/image/icon.ico">
+    <script src="../assets/script/script.js"></script>
+    <script src="../assets/script/render.js"></script>
+
+    <link rel="stylesheet" href="style.css">
+    <script src="./script.js"></script>
+</head>
+
+<body class="background">
+<div class="content-container theme-content">
+    <div class="title-bar theme-header">
+        <div class="logo" style="width:100%;height:100%"></div>
+    </div>
+    <div class="instances-container theme-shadow">
+        <div class="heading">
+            Instances
+        </div>
+        <div id="instances" class="instance-list">
+
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    get("/api/instances", function(result) {
+        renderModpacks(result["data"]);
+    });
+</script>
+</html>

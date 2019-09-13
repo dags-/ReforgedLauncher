@@ -1,0 +1,40 @@
+.layout-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.layout-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.layout-header {
+    width: 100%;
+    flex-grow: 1;
+    padding: 2vw 1vw;
+    font-size: x-large;
+    box-sizing: border-box;
+}
+
+.layout-footer {
+    display: flex;
+    align-content: center;
+    padding: 1vw 1vw;
+    box-sizing: border-box;
+}
+
+.layout-body {
+    flex-grow: 1;
+}
+
+.layout-scroll-pane {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}

@@ -1,0 +1,116 @@
+.content-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.title-bar {
+    flex-grow: 1;
+    height: 15vh;
+    min-height: 50px;
+    max-height: 70px;
+}
+
+.heading {
+    color: #eee;
+    width: 90%;
+    margin: auto;
+    padding: 1.25vw;
+    box-sizing: border-box;
+    font-size: x-large;
+}
+
+.instances-container {
+    flex-grow: 2;
+    overflow-y: auto;
+}
+
+.instance-list {
+    width: 90%;
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.instance-container {
+    flex-basis: 33.33%;
+    height: 40vw;
+}
+
+.instance {
+    width: 90%;
+    height: 90%;
+    margin: auto;
+    overflow: hidden;
+    position: relative;
+    box-sizing: border-box;
+}
+
+.instance-img {
+    position: absolute;
+    display: block;
+    top: 0;
+    right: -50%;
+    width: auto;
+    height: 100%;
+    overflow: hidden;
+}
+
+.instance-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    border: 3px solid white;
+    box-sizing: border-box;
+    background-color: rgba(255, 255, 255, 0.1);
+    transition: background-color .1s;
+}
+
+.instance-overlay:hover {
+    background-color: transparent;
+    box-shadow: 0 0 60px 0 rgba(0, 0, 0, 0.1) inset;
+    transition: background-color .1s;
+}
+
+.instance-info {
+    position: absolute;
+    text-align: center;
+    color: white;
+    bottom: 0;
+    width: 100%;
+    height: 25%;
+    min-height: 50px;
+    padding: 2vh;
+    box-sizing: border-box;
+    font-size: 16px;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.instance-info .subtitle {
+    font-size: 12px;
+}
+
+.instance-add-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.instance-add {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 0;
+    color: #eee;
+    background-color: rgba(0, 0, 0, 0.25);
+}

@@ -1,0 +1,48 @@
+.upper {
+    width: 100%;
+    height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-size {
+    width: 70%;
+    height: 50%;
+}
+
+.status {
+    color: white;
+    padding: 5px 0;
+    white-space: nowrap;
+}
+
+.message {
+    font-size: smaller;
+}
+
+.hidden {
+    display: none;
+}
+
+progress {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    height: 6px;
+    margin: auto;
+    border-style: hidden;
+    color: rgb(40, 180, 100);
+    background-color: whitesmoke;
+}
+
+progress::-webkit-progress-bar {
+    border-style: hidden;
+    background-color: whitesmoke;
+}
+
+progress::-webkit-progress-value {
+    color: rgb(40, 180, 100);
+    border-style: hidden;
+    background-color: rgb(40, 180, 100);
+}

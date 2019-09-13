@@ -1,0 +1,35 @@
+body {
+    scrollbar-arrow-color: #777;
+    scrollbar-track-color: #222;
+    scrollbar-face-color: #444;
+    scrollbar-shadow-color: #333;
+}
+
+.theme {
+    color: #eee;
+}
+
+.theme-header {
+    background-color: rgba(0, 0, 0, 0.95);
+}
+
+.theme-row:nth-child(even) {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.theme-content {
+    background-color: rgba(10, 10, 10, 0.75);
+}
+
+.theme-shadow {
+    box-shadow: 0 0 50px 0 rgba(0, 0, 0, 0.5) inset;
+}
+
+.theme-highlight {
+    background-color: #2196F3;
+}
+
+.theme-contrast {
+    color: #333;
+    background-color: rgba(255, 255, 255, 0.85);
+}
