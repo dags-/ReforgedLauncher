@@ -1,11 +1,10 @@
 package platform
 
 import (
-	"os"
-	"os/exec"
-
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/errs"
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/progress"
+	"os"
+	"os/exec"
 )
 
 type Platform interface {

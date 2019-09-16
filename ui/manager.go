@@ -98,6 +98,8 @@ func (m *Manager) Attach(settings *Settings) error {
 	settings.Url = m.srv.Addr + settings.Url
 	settings.Icon = m.icon
 
+	log.Println(settings.Url)
+
 	if settings.Resizable {
 		cfg := Load(m.appDir)
 		settings.Width = cfg.WindowWidth

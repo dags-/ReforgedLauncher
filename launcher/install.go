@@ -2,10 +2,9 @@ package launcher
 
 import (
 	"fmt"
-	"net/http"
-
 	"github.com/Conquest-Reforged/ReforgedLauncher/modpack"
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/files"
+	"net/http"
 )
 
 type Install struct {
@@ -25,7 +24,7 @@ func (l *Launcher) getInstall(w http.ResponseWriter, r *http.Request) {
 	listener := listener(l.wm.Window())
 
 	listener.Stat("Loading instance", 0.33)
-	instance, e := l.Instance(r.URL.Path)
+	instance, e := l.Instance(unescape(r.URL.Path))
 	if e != nil {
 		l.onError("Install", "Load instance", e)
 		return
@@ -50,7 +49,7 @@ func (l *Launcher) getInstall(w http.ResponseWriter, r *http.Request) {
 }
 
 func (l *Launcher) postInstall(w http.ResponseWriter, r *http.Request) {
-	repo, e := modpack.ParseRepo(r.URL.Path)
+	repo, e := modpack.ParseRepo(unescape(r.URL.Path))
 	if e != nil {
 		fail(w, e)
 		return
@@ -90,5 +89,5 @@ func (l *Launcher) postInstall(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	l.wm.Progress("install/" + instance.Name)
+	l.wm.Progress("install/" + escape(instance.Name))
 }

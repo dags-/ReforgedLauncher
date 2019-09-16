@@ -53,7 +53,7 @@ func (l *Launcher) instance(w http.ResponseWriter, r *http.Request) {
 }
 
 func (l *Launcher) getInstance(w http.ResponseWriter, r *http.Request) {
-	inst, e := l.Instance(r.URL.Path)
+	inst, e := l.Instance(unescape(r.URL.Path))
 	if e == nil {
 		success(w, inst)
 	} else {
@@ -64,7 +64,7 @@ func (l *Launcher) getInstance(w http.ResponseWriter, r *http.Request) {
 func (l *Launcher) deleteInstance(w http.ResponseWriter, r *http.Request) {
 	instances, e := l.LoadInstances()
 	if e == nil {
-		delete(instances, r.URL.Path)
+		delete(instances, unescape(r.URL.Path))
 		e = l.SaveInstances(instances)
 		if e == nil {
 			success(w, nil)
@@ -75,7 +75,7 @@ func (l *Launcher) deleteInstance(w http.ResponseWriter, r *http.Request) {
 }
 
 func (l *Launcher) postInstance(w http.ResponseWriter, r *http.Request) {
-	inst, e := l.Instance(r.URL.Path)
+	inst, e := l.Instance(unescape(r.URL.Path))
 	if e == nil {
 		var opts instance.Instance
 		e = json.NewDecoder(r.Body).Decode(&opts)

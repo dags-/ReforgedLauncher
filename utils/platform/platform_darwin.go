@@ -1,11 +1,13 @@
 package platform
 
 import (
-	"os/exec"
-
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/files"
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/progress"
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/tasks"
+	"log"
+	"os"
+	"os/exec"
+	"path/filepath"
 )
 
 var platform = &darwin{}
@@ -31,10 +33,29 @@ func (d darwin) LauncherName() string {
 
 func (d darwin) ExtractLauncher(path string, listener progress.Listener) (string, error) {
 	out := files.RelDir(path, platform.LauncherName())
+	log.Println(path)
+	log.Println(out)
 	listener.GlobalStatus("Extracting launcher")
-	return out, tasks.Unzip(path, out, listener)
+	e := tasks.Unzip(path, files.MustDir(out, "Contents"), listener)
+	files.Del(path)
+	if e != nil {
+		return "", e
+	}
+	exe := filepath.Join(out, "Contents", "MacOS", "launcher")
+	e = os.Chmod(exe, os.ModePerm)
+	if e != nil {
+		return "", nil
+	}
+
+	return out, e
 }
 
-func (d darwin) OpenExecutable(exe string, args ...string) *exec.Cmd {
-	return exec.Command("open", exe, args...)
+func (d darwin) RunExecutable(exe string, args ...string) *exec.Cmd {
+	cmd := make([]string, len(args)+2)
+	cmd[0] = exe
+	cmd[1] = "--args"
+	for i, a := range args {
+		cmd[2+i] = a
+	}
+	return exec.Command("open", cmd...)
 }

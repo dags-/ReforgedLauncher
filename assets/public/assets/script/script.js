@@ -43,7 +43,7 @@ function del(url, callback) {
 
 function request(method, url, body, callback) {
     var req = new XMLHttpRequest();
-    req.open(method, url, true);
+    req.open(method, escape(url), true);
     req.setRequestHeader('cache-control', 'no-cache, must-revalidate, post-check=0, pre-check=0');
     req.setRequestHeader('cache-control', 'max-age=0');
     req.setRequestHeader('pragma', 'no-cache');

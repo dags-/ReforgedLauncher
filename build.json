@@ -9,6 +9,7 @@
   ],
   "targets": {
     "darwin/amd64": {
+      "icon": ".graphics/icon.icns",
       "flags": ["-s -w"]
     },
     "linux/amd64": {

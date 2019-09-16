@@ -1,6 +1,8 @@
 package instance
 
 import (
+	"fmt"
+	"os"
 	"path/filepath"
 	"time"
 
@@ -76,6 +78,8 @@ func (i *Instance) Prepare(installation *modpack.Installation, listener progress
 		listener.GlobalStatus("Installing forge")
 		e = forge.Install(installation, listener)
 		if e != nil {
+			fmt.Println(e)
+			os.Exit(0)
 			return e
 		}
 		listener.TaskStatus("")

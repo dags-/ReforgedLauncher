@@ -8,14 +8,10 @@ import (
 	"log"
 	"os"
 	"os/exec"
-	"path/filepath"
 	"sync"
-
-	"github.com/mitchellh/go-ps"
 
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/errs"
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/files"
-	"github.com/Conquest-Reforged/ReforgedLauncher/utils/platform"
 )
 
 var (
@@ -181,16 +177,10 @@ func buildCommand(settings *Settings) (*exec.Cmd, error) {
 		return exec.Command("go", "run", "main.go", "-w", string(data)), nil
 	}
 
-	p, e := ps.FindProcess(os.Getpid())
+	exe, e := os.Executable()
 	if e != nil {
 		return nil, e
 	}
 
-	wd, e := os.Getwd()
-	if e != nil {
-		return nil, e
-	}
-
-	exe := filepath.Join(wd, p.Executable())
-	return platform.RunExecutable(exe, "-w", string(data)), nil
+	return exec.Command(exe, "-w", string(data)), nil
 }

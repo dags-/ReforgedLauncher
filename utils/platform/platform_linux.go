@@ -32,6 +32,6 @@ func (l linux) ExtractLauncher(path string, listener progress.Listener) (string,
 	return files.RenameRel(path, platform.LauncherName())
 }
 
-func (l linux) OpenExecutable(exe string, args ...string) *exec.Cmd {
+func (l linux) RunExecutable(exe string, args ...string) *exec.Cmd {
 	return exec.Command("./"+exe, args...)
 }

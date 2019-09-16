@@ -6,6 +6,7 @@ import (
 	"html"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"strings"
 
 	"github.com/Conquest-Reforged/ReforgedLauncher/instance/profile"
@@ -37,7 +38,7 @@ func Install(i *modpack.Installation, listener progress.Listener) error {
 
 func installForge(i *modpack.Installation, wrapper, installer string, listener progress.Listener) error {
 	// add the wrapper and installer jars to the classpath
-	classpath := fmt.Sprintf(`%s;%s`, wrapper, installer)
+	classpath := buildClassPath(wrapper, installer)
 	cmd := buildCommand(classpath, i.GameDir)
 	out, e := cmd.StdoutPipe()
 	if e != nil {
@@ -70,6 +71,13 @@ func buildCommand(classpath, gameDir string) *exec.Cmd {
 	cmd := exec.Command("java", "-classpath", classpath, "Main", gameDir)
 	platform.HideConsole(cmd)
 	return cmd
+}
+
+func buildClassPath(wrapper, installer string) string {
+	if runtime.GOOS == "windows" {
+		return wrapper + ";" + installer
+	}
+	return wrapper + ":" + installer
 }
 
 func findForgeInstaller(i *modpack.Installation) (string, bool) {

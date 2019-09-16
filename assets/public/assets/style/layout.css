@@ -23,8 +23,9 @@
 
 .layout-footer {
     display: flex;
-    align-content: center;
     padding: 1vw 1vw;
+    min-height: 60px;
+    align-content: center;
     box-sizing: border-box;
 }
 

@@ -2,6 +2,7 @@ package launcher
 
 import (
 	"net/http"
+	"net/url"
 
 	"github.com/Conquest-Reforged/ReforgedLauncher/ui"
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/files"
@@ -11,6 +12,18 @@ import (
 type Result struct {
 	Success bool        `json:"success"`
 	Data    interface{} `json:"data"`
+}
+
+func escape(s string) string {
+	return url.PathEscape(s)
+}
+
+func unescape(s string) string {
+	p, e := url.PathUnescape(s)
+	if e != nil {
+		return s
+	}
+	return p
 }
 
 func listener(w *ui.Window) progress.Listener {

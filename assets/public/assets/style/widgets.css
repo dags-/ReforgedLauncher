@@ -1,6 +1,6 @@
 input {
     flex-grow: 1;
-    padding: 1.25vw 1.5vw;
+    padding: 1.25em 1.5em;
     border: none;
     cursor: pointer;
 }
@@ -29,7 +29,7 @@ input:hover {
 
 input[type="button"] {
     border: none;
-    padding: 1.25vw 4vw;
+    padding: 1.5vw 4vw;
     outline: none !important;
 }
 

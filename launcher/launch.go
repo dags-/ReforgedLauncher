@@ -1,6 +1,7 @@
 package launcher
 
 import (
+	"log"
 	"net/http"
 	"time"
 
@@ -8,14 +9,16 @@ import (
 )
 
 func (l *Launcher) run(w http.ResponseWriter, r *http.Request) {
-	l.wm.Progress("launch/" + r.URL.Path)
+	l.wm.Progress("launch/" + escape(r.URL.Path))
 }
 
 func (l *Launcher) launch(w http.ResponseWriter, r *http.Request) {
+	log.Println("launch", r.URL.Path)
 	l.Launch(r.URL.Path)
 }
 
 func (l *Launcher) Launch(id string) {
+	id = unescape(id)
 	listener := listener(l.wm.Window())
 
 	// load instance or create default
