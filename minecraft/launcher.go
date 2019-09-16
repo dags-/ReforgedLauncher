@@ -6,6 +6,7 @@ import (
 
 	"github.com/Conquest-Reforged/ReforgedLauncher/modpack"
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/files"
+	"github.com/Conquest-Reforged/ReforgedLauncher/utils/platform"
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/progress"
 )
 
@@ -14,7 +15,7 @@ type MojangLauncher struct {
 }
 
 func Launcher(appDir string) (*MojangLauncher, error) {
-	path := files.MustFile(appDir, "Launcher", executable())
+	path := files.MustFile(appDir, "Launcher", platform.LauncherName())
 	if !files.Exists(path) {
 		return nil, fmt.Errorf("mojang launcher not found")
 	}
@@ -27,7 +28,7 @@ func Install(appDir string, listener progress.Listener) (*MojangLauncher, error)
 		return nil, e
 	}
 
-	file, e = install(file, listener)
+	file, e = platform.ExtractLauncher(file, listener)
 	if e != nil {
 		return nil, e
 	}
@@ -36,7 +37,7 @@ func Install(appDir string, listener progress.Listener) (*MojangLauncher, error)
 }
 
 func (l *MojangLauncher) Launch(i *modpack.Installation) *exec.Cmd {
-	cmd := launch(l.path, i)
+	cmd := platform.LaunchCmd(l.path, i.AppDir)
 	cmd.Dir = i.AppDir
 	return cmd
 }

@@ -3,13 +3,15 @@ package forge
 import (
 	"bufio"
 	"fmt"
-	"github.com/Conquest-Reforged/ReforgedLauncher/instance/profile"
-	"github.com/Conquest-Reforged/ReforgedLauncher/modpack"
-	"github.com/Conquest-Reforged/ReforgedLauncher/utils/files"
-	"github.com/Conquest-Reforged/ReforgedLauncher/utils/progress"
 	"os/exec"
 	"path/filepath"
 	"strings"
+
+	"github.com/Conquest-Reforged/ReforgedLauncher/instance/profile"
+	"github.com/Conquest-Reforged/ReforgedLauncher/modpack"
+	"github.com/Conquest-Reforged/ReforgedLauncher/utils/files"
+	"github.com/Conquest-Reforged/ReforgedLauncher/utils/platform"
+	"github.com/Conquest-Reforged/ReforgedLauncher/utils/progress"
 )
 
 func Install(i *modpack.Installation, listener progress.Listener) error {
@@ -61,7 +63,9 @@ func installForge(i *modpack.Installation, wrapper, installer string, listener p
 }
 
 func buildCommand(classpath, gameDir string) *exec.Cmd {
-	return exec.Command("java", "-classpath", classpath, "Main", gameDir)
+	cmd := exec.Command("java", "-classpath", classpath, "Main", gameDir)
+	platform.HideConsole(cmd)
+	return cmd
 }
 
 func findForgeInstaller(i *modpack.Installation) (string, bool) {

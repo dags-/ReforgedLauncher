@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/files"
+	"github.com/Conquest-Reforged/ReforgedLauncher/utils/platform"
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/progress"
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/tasks"
 )
@@ -41,7 +42,7 @@ func download(appdir string, listener progress.Listener) (string, error) {
 		return "", e
 	}
 
-	link := m.platform()
+	link := platform.AppLink(m)
 	path := files.TempFile(appdir, "Launcher")
 
 	listener.GlobalStatus("Downloading Minecraft launcher")
