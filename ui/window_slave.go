@@ -24,7 +24,7 @@ func Open(settings *Settings) {
 
 	go listen(w)
 
-	w.SetColor(0, 0, 0, 255)
+	w.SetColor(0, 0, 0, 242)
 	w.Run()
 }
 
