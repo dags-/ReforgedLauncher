@@ -55,7 +55,7 @@ func startMaster() {
 	// set up logging
 	logFile, e := os.Create(files.MustFile(properties.AppDir, "launcher.log"))
 	errs.Panic("Open log file", e)
-	log.SetOutput(io.MultiWriter(logFile, log.Writer()))
+	log.SetOutput(io.MultiWriter(logFile, os.Stdout))
 
 	// setup & extract resources
 	public := rice.MustFindBox("assets/public")
