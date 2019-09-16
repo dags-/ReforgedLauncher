@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
+	"runtime"
 
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/files"
-	"github.com/Conquest-Reforged/ReforgedLauncher/utils/platform"
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/progress"
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/tasks"
 )
@@ -42,7 +42,7 @@ func download(appdir string, listener progress.Listener) (string, error) {
 		return "", e
 	}
 
-	link := platform.AppLink(m)
+	link := m.getAppLink()
 	path := files.TempFile(appdir, "Launcher")
 
 	listener.GlobalStatus("Downloading Minecraft launcher")
@@ -73,4 +73,17 @@ func getMeta() (*Meta, error) {
 	}
 
 	return &meta, e
+}
+
+func (m *Meta) getAppLink() *AppLink {
+	switch runtime.GOOS {
+	case "windows":
+		return m.Windows
+	case "linux":
+		return m.Linux
+	case "darwin":
+		return m.OSX
+	default:
+		return nil
+	}
 }

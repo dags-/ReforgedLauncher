@@ -3,7 +3,6 @@ package platform
 import (
 	"os/exec"
 
-	"github.com/Conquest-Reforged/ReforgedLauncher/minecraft"
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/files"
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/progress"
 )
@@ -19,10 +18,6 @@ func (l linux) Icon(name string) string {
 
 func (l linux) HideConsole(cmd *exec.Cmd) {
 
-}
-
-func (l linux) AppLink(meta *minecraft.Meta) *minecraft.AppLink {
-	return meta.Linux
 }
 
 func (l linux) LauncherName() string {
