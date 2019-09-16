@@ -33,6 +33,6 @@ func (w windows) ExtractLauncher(path string, listener progress.Listener) (strin
 	return files.RenameRel(path, platform.LauncherName())
 }
 
-func (w windows) LaunchCmd(exe, workDir string) *exec.Cmd {
-	return exec.Command(exe, "--workDir", workDir)
+func (w windows) RunExecutable(exe string, args ...string) *exec.Cmd {
+	return exec.Command(exe, args...)
 }

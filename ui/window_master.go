@@ -15,6 +15,7 @@ import (
 
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/errs"
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/files"
+	"github.com/Conquest-Reforged/ReforgedLauncher/utils/platform"
 )
 
 var (
@@ -191,6 +192,5 @@ func buildCommand(settings *Settings) (*exec.Cmd, error) {
 	}
 
 	exe := filepath.Join(wd, p.Executable())
-
-	return exec.Command(exe, "-w", string(data)), nil
+	return platform.RunExecutable(exe, "-w", string(data)), nil
 }

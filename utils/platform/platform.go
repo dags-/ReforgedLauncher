@@ -19,7 +19,7 @@ type Platform interface {
 
 	ExtractLauncher(path string, listener progress.Listener) (string, error)
 
-	LaunchCmd(exe, workDir string) *exec.Cmd
+	RunExecutable(exe string, args ...string) *exec.Cmd
 }
 
 func AppDir(name string) string {
@@ -42,8 +42,8 @@ func ExtractLauncher(path string, listener progress.Listener) (string, error) {
 	return platform.ExtractLauncher(path, listener)
 }
 
-func LaunchCmd(exe, workDir string) *exec.Cmd {
-	return platform.LaunchCmd(exe, workDir)
+func RunExecutable(path string, args ...string) *exec.Cmd {
+	return platform.RunExecutable(path, args...)
 }
 
 func Home() string {

@@ -35,6 +35,6 @@ func (d darwin) ExtractLauncher(path string, listener progress.Listener) (string
 	return out, tasks.Unzip(path, out, listener)
 }
 
-func (d darwin) LaunchCmd(exe, workDir string) *exec.Cmd {
-	return exec.Command("open", exe, "--workDir", workDir)
+func (d darwin) OpenExecutable(exe string, args ...string) *exec.Cmd {
+	return exec.Command("open", exe, args...)
 }

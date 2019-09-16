@@ -5,12 +5,12 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"runtime"
 	"sync"
 
 	rice "github.com/GeertJohan/go.rice"
 
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/errs"
+	"github.com/Conquest-Reforged/ReforgedLauncher/utils/platform"
 )
 
 type Manager struct {
@@ -33,16 +33,9 @@ func NewManager(appDir, name string, box *rice.Box) *Manager {
 		srv:    Serve(mux),
 		name:   name,
 		appDir: appDir,
-		icon:   filepath.Join(appDir, "Assets", icon("icon")),
-		tray:   filepath.Join(appDir, "Assets", icon("tray")),
+		icon:   filepath.Join(appDir, "Assets", platform.Icon("icon")),
+		tray:   filepath.Join(appDir, "Assets", platform.Icon("tray")),
 	}
-}
-
-func icon(name string) string {
-	if runtime.GOOS == "windows" {
-		return name + ".ico"
-	}
-	return name + ".png"
 }
 
 func (m *Manager) Address() string {
