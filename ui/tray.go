@@ -1,68 +1,49 @@
 package ui
 
 import (
-	"runtime"
+	"io/ioutil"
 
-	rice "github.com/GeertJohan/go.rice"
 	"github.com/dags-/systray"
+
+	"github.com/Conquest-Reforged/ReforgedLauncher/utils/errs"
 )
 
-func getIcon(box *rice.Box) []byte {
-	if runtime.GOOS == "windows" {
-		return box.MustBytes("assets/image/tray.ico")
+func (m *Manager) RunTray() {
+	systray.Run(m.ready, m.exit)
+}
+
+func (m *Manager) ready() {
+	icon, e := ioutil.ReadFile(m.tray)
+
+	if e == nil {
+		systray.SetIcon(icon)
 	} else {
-		return box.MustBytes("assets/image/tray.png")
+		errs.Log("Load icon", e)
 	}
-}
 
-func (m *Manager) handleTray() {
-	systray.Run(m.trayReady, m.trayExit)
-}
-
-func (m *Manager) trayReady() {
-	systray.SetTitle("Launcher")
-	systray.SetIcon(m.icon)
-	c := Load(m.appDir)
 	auto := systray.AddMenuItem("Auto Launch", "")
 	exit := systray.AddMenuItem("Quit", "")
-
-	if c.AutoLaunch {
-		auto.Check()
-	} else {
-		auto.Uncheck()
-	}
-
 	for {
 		select {
 		case <-systray.ClickedCh:
-			m.NewSizedWindow(Settings{
-				Path:      "/home",
-				Resizable: true,
-			})
-			systray.Quit()
-			return
+			if !m.HasWindow() {
+				m.Home()
+			}
+			break
 		case <-auto.ClickedCh:
 			if auto.Checked() {
 				auto.Uncheck()
 			} else {
 				auto.Check()
 			}
-			c.AutoLaunch = auto.Checked()
-			Save(m.appDir, c)
 			break
 		case <-exit.ClickedCh:
-			systray.Quit()
-			go m.Exit()
-			return
-		case <-m.open:
-			m.NewSizedWindow(Settings{
-				Path:      "/home",
-				Resizable: true,
-			})
-			systray.Quit()
+			m.Exit()
 			return
 		}
 	}
 }
 
-func (m *Manager) trayExit() {}
+func (m *Manager) exit() {
+
+}

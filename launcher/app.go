@@ -21,11 +21,11 @@ type Properties struct {
 
 func NewLauncher(properties *Properties, box *rice.Box) *Launcher {
 	r := repo.Open(properties.AppDir)
-	wm := ui.NewManager(properties.AppDir, properties.Branding, box)
+	m := ui.NewManager(properties.AppDir, properties.Branding, box)
 	return &Launcher{
 		Properties: properties,
 		r:          r,
-		wm:         wm,
+		wm:         m,
 	}
 }
 
@@ -39,32 +39,26 @@ func (l *Launcher) Run() {
 	l.wm.StripPrefix("/api/install/", l.install)
 	l.wm.StripPrefix("/api/instance/", l.instance)
 
-	c := ui.FirstLoad(l.AppDir, l.wm.Address())
-
-	settings := ui.Settings{
-		Path:      "/home",
-		Width:     c.WindowWidth,
-		Height:    c.WindowHeight,
-		Resizable: true,
-	}
-
-	if c.AutoLaunch {
+	config := ui.FirstLoad(l.AppDir, l.wm.Address())
+	if config.AutoLaunch {
 		last, e := l.LastInstance()
 		if e == nil {
-			settings.Path = "/progress#launch/" + last.Name
-			settings.Width = 800
-			settings.Height = 420
-			settings.Resizable = false
-			settings.Borderless = true
+			settings := &ui.Settings{
+				Url:        "/progress#launch/" + last.Name,
+				Width:      800,
+				Height:     420,
+				Borderless: true,
+			}
+			e := l.wm.Attach(settings)
+			if e == nil {
+				l.wm.RunTray()
+				return
+			}
 		}
 	}
 
-	l.wm.NewWindow(settings)
-	l.wm.Run()
-}
-
-func (l *Launcher) Close() {
-	l.wm.Close()
+	l.wm.Home()
+	l.wm.RunTray()
 }
 
 func (l *Launcher) Exit() {

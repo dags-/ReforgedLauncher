@@ -9,7 +9,7 @@ import (
 )
 
 func (l *Launcher) openWindow(w http.ResponseWriter, r *http.Request) {
-	go l.wm.Open()
+	l.wm.Home()
 }
 
 func (l *Launcher) openFolder(w http.ResponseWriter, r *http.Request) {

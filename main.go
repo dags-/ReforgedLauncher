@@ -1,6 +1,8 @@
 package main
 
 import (
+	"encoding/json"
+	"flag"
 	"io"
 	"log"
 	"net/http"
@@ -18,10 +20,24 @@ import (
 
 const (
 	BRANDING = "ReforgedLauncher"
-	MODPACKS = "https://example.com/modpacks.json"
+	MODPACKS = "https://io.conquestreforged.com/modpacks/modpacks.json"
+)
+
+var (
+	w = flag.String("w", "", "")
 )
 
 func main() {
+	flag.Parse()
+
+	if *w == "" {
+		startMaster()
+	} else {
+		startSlave()
+	}
+}
+
+func startMaster() {
 	// get user
 	u, e := user.Current()
 	errs.Panic("User", e)
@@ -50,6 +66,13 @@ func main() {
 	// launch
 	l := launcher.NewLauncher(&properties, public)
 	l.Run()
+}
+
+func startSlave() {
+	var settings ui.Settings
+	e := json.Unmarshal([]byte(*w), &settings)
+	errs.Panic("Parse window settings", e)
+	ui.Open(&settings)
 }
 
 func holdLock(props launcher.Properties) *single.Single {

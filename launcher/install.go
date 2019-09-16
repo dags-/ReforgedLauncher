@@ -75,7 +75,7 @@ func (l *Launcher) postInstall(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	install.Name = nameCleaner.ReplaceAllString(r.URL.Path, "")
+	install.Name = nameCleaner.ReplaceAllString(install.Name, "")
 	if _, ok := instances[install.Name]; ok {
 		fail(w, fmt.Errorf("instance already exists: %s", install.Name))
 		return

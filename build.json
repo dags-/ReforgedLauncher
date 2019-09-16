@@ -6,8 +6,17 @@
   "output": ".builds",
   "setup": ["rice embed-go"],
   "targets": {
+    "darwin/amd64": {
+      "compress": true
+    },
+    "linux/amd64": {
+      "compress": true,
+      "meta": {
+        "categories": "Game"
+      }
+    },
     "windows/amd64": {
-      "compress": false,
+      "compress": true,
       "generate": ["goversioninfo -64"],
       "flags": ["-H=windowsgui -s -w"]
     }

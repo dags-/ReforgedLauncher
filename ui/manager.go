@@ -2,123 +2,131 @@ package ui
 
 import (
 	"net/http"
+	"os"
 	"path/filepath"
+	"runtime"
 	"sync"
 
 	rice "github.com/GeertJohan/go.rice"
-	"github.com/dags-/webview"
+	"github.com/dags-/systray"
 
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/errs"
 )
 
 type Manager struct {
-	name   string
-	appDir string
+	lock   *sync.RWMutex
 	mux    *http.ServeMux
 	srv    *http.Server
-	lock   *sync.RWMutex
+	name   string
+	icon   string
+	tray   string
+	appDir string
 	window *Window
-	icon   []byte
-	open   chan interface{}
-	close  chan interface{}
-	exit   chan interface{}
-	create chan Settings
 }
 
-func NewManager(appdDir, name string, box *rice.Box) *Manager {
+func NewManager(appDir, name string, box *rice.Box) *Manager {
 	mux := http.NewServeMux()
 	mux.Handle("/", http.FileServer(box.HTTPBox()))
 	return &Manager{
+		lock:   &sync.RWMutex{},
 		mux:    mux,
-		name:   name,
-		appDir: appdDir,
 		srv:    Serve(mux),
-		icon:   getIcon(box),
-		open:   make(chan interface{}),
-		close:  make(chan interface{}),
-		exit:   make(chan interface{}),
-		create: make(chan Settings),
+		name:   name,
+		appDir: appDir,
+		icon:   filepath.Join(appDir, "Assets", icon("icon")),
+		tray:   filepath.Join(appDir, "Assets", icon("tray")),
 	}
+}
+
+func icon(name string) string {
+	if runtime.GOOS == "windows" {
+		return name + ".ico"
+	}
+	return name + ".png"
 }
 
 func (m *Manager) Address() string {
 	return m.srv.Addr
 }
 
+func (m *Manager) Window() *Window {
+	m.lock.Lock()
+	defer m.lock.Unlock()
+	return m.window
+}
+
+func (m *Manager) HasWindow() bool {
+	m.lock.Lock()
+	defer m.lock.Unlock()
+	if m.window == nil {
+		return false
+	}
+	m.window.l.Lock()
+	defer m.window.l.Unlock()
+	return m.window.cmd != nil && m.window.events != nil
+}
+
+func (m *Manager) CloseWindow() {
+	m.lock.Lock()
+	defer m.lock.Unlock()
+	if m.window != nil {
+		m.window.Exit()
+		m.window = nil
+	}
+}
+
 func (m *Manager) Home() {
-	m.NewWindow(Settings{
-		Path:      "/home",
+	e := m.Attach(&Settings{
+		Url:       "/home",
 		Width:     800,
 		Height:    480,
 		Resizable: true,
 	})
+	errs.Log("Attach window", e)
 }
 
 func (m *Manager) Progress(path string) {
-	m.NewWindow(Settings{
-		Path:       "/progress#" + path,
+	e := m.Attach(&Settings{
+		Url:        "/progress#" + path,
 		Width:      800,
 		Height:     420,
 		Borderless: true,
 	})
+	errs.Log("Attach window", e)
 }
 
-func (m *Manager) NewSizedWindow(settings Settings) {
-	cfg := Load(m.appDir)
-	settings.Width = cfg.WindowWidth
-	settings.Height = cfg.WindowHeight
-	m.NewWindow(settings)
-}
+func (m *Manager) Attach(settings *Settings) error {
+	m.CloseWindow()
 
-func (m *Manager) NewWindow(settings Settings) {
-	go func() {
-		m.create <- settings
-	}()
-}
+	m.lock.Lock()
+	defer m.lock.Unlock()
 
-func (m *Manager) Window() *Window {
-	return m.window
-}
+	settings.Title = m.name + settings.Title
+	settings.Url = m.srv.Addr + settings.Url
+	settings.Icon = m.icon
 
-func (m *Manager) Run() {
-	defer close(m.open)
-	defer close(m.exit)
-	defer close(m.close)
-	defer close(m.create)
-	for {
-		m.handleWindow()
-		m.handleTray()
+	if settings.Resizable {
+		cfg := Load(m.appDir)
+		settings.Width = cfg.WindowWidth
+		settings.Height = cfg.WindowHeight
 	}
-}
 
-func (m *Manager) Open() {
-	ch := m.open
-	if ch != nil {
-		ch <- nil
+	w, e := startWindow(settings)
+	if e != nil {
+		return e
 	}
-}
 
-func (m *Manager) Close() {
-	m.close <- nil
+	m.window = w
+	return nil
 }
 
 func (m *Manager) Exit() {
-	m.exit <- nil
-}
-
-func (m *Manager) createWindow(settings Settings) *Window {
-	w := &Window{
-		w: webview.New(webview.Settings{
-			Title:      m.name + settings.Title,
-			URL:        m.srv.Addr + settings.Path,
-			Width:      settings.Width,
-			Height:     settings.Height,
-			Resizable:  settings.Resizable,
-			Borderless: settings.Borderless,
-		}),
-		b: true,
+	m.lock.Lock()
+	defer m.lock.Unlock()
+	if m.window != nil {
+		m.window.Exit()
+		m.window = nil
 	}
-	e := w.w.SetIcon(filepath.Join(m.appDir, "icon.ico"))
-	errs.Log("Set Icon", e)
-	return w
+	systray.Quit()
+	os.Exit(0)
 }

@@ -76,5 +76,5 @@ func (l *Launcher) Launch(id string) {
 	}
 
 	// close window
-	l.Close()
+	l.wm.CloseWindow()
 }

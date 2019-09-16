@@ -15,7 +15,7 @@ import (
 
 func Close(c io.Closer) {
 	if c != nil {
-		errs.Log("Close", c.Close())
+		errs.Log("Exit", c.Close())
 	}
 }
 
