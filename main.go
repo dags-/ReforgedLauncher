@@ -9,7 +9,7 @@ import (
 	"os"
 	"os/user"
 
-	rice "github.com/GeertJohan/go.rice"
+	"github.com/GeertJohan/go.rice"
 	"github.com/marcsauter/single"
 
 	"github.com/Conquest-Reforged/ReforgedLauncher/launcher"
