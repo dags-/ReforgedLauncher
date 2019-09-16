@@ -134,6 +134,30 @@ func handleClose(w *Window) {
 	defer dispose(w)
 	e := w.cmd.Wait()
 	errs.Log("Wait", e)
+	log.Println("Window listener thread shut down")
+}
+
+func terminate(w *Window) {
+	w.l.Lock()
+	if w.events != nil {
+		// release lock as required in w.Exit
+		w.l.Unlock()
+		log.Println("Closing window")
+		w.Exit()
+
+		// obtain lock again to allow w.Exit to complete
+		w.l.Lock()
+
+		// close events channel, allows handleEvents to die
+		close(w.events)
+	}
+	defer w.l.Unlock()
+
+	// kill process
+	if w.cmd != nil {
+		log.Println("Stopping window process")
+		_ = w.cmd.Process.Kill()
+	}
 }
 
 func dispose(w *Window) {

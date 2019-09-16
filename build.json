@@ -4,19 +4,20 @@
   "identifier": "me.dags.reforged",
   "icon": ".graphics/icon.png",
   "output": ".builds",
-  "setup": ["rice embed-go"],
+  "setup": [
+    "rice embed-go"
+  ],
   "targets": {
     "darwin/amd64": {
-      "compress": true
+      "flags": ["-s -w"]
     },
     "linux/amd64": {
-      "compress": true,
+      "flags": ["-s -w"],
       "meta": {
         "categories": "Game"
       }
     },
     "windows/amd64": {
-      "compress": true,
       "generate": ["goversioninfo -64"],
       "flags": ["-H=windowsgui -s -w"]
     }

@@ -134,7 +134,7 @@ func (l *Launcher) NewInstance(id string, remote *modpack.Remote) *instance.Inst
 		AppDir:   l.AppDir,
 		ModPack:  remote.AsModPack(),
 		LastUsed: time.Now(),
-		GameDir:  filepath.Join(l.AppDir, "ModPacks", id),
+		GameDir:  instance.DefaultGameDir(id),
 	}
 }
 

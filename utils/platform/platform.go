@@ -1,12 +1,16 @@
 package platform
 
 import (
+	"os"
 	"os/exec"
 
+	"github.com/Conquest-Reforged/ReforgedLauncher/utils/errs"
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/progress"
 )
 
 type Platform interface {
+	AppDir(name string) string
+
 	Icon(name string) string
 
 	HideConsole(cmd *exec.Cmd)
@@ -16,6 +20,10 @@ type Platform interface {
 	ExtractLauncher(path string, listener progress.Listener) (string, error)
 
 	LaunchCmd(exe, workDir string) *exec.Cmd
+}
+
+func AppDir(name string) string {
+	return platform.AppDir(name)
 }
 
 func Icon(name string) string {
@@ -36,4 +44,10 @@ func ExtractLauncher(path string, listener progress.Listener) (string, error) {
 
 func LaunchCmd(exe, workDir string) *exec.Cmd {
 	return platform.LaunchCmd(exe, workDir)
+}
+
+func Home() string {
+	h, e := os.UserHomeDir()
+	errs.Panic("User Home Dir", e)
+	return h
 }

@@ -12,6 +12,10 @@ var platform = &linux{}
 type linux struct {
 }
 
+func (l linux) AppDir(name string) string {
+	return files.MustDir(Home(), "."+name)
+}
+
 func (l linux) Icon(name string) string {
 	return name + ".png"
 }

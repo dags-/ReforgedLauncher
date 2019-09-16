@@ -13,6 +13,10 @@ var platform = &windows{}
 type windows struct {
 }
 
+func (w windows) AppDir(name string) string {
+	return files.MustDir(Home(), "AppData", "Local", name)
+}
+
 func (w windows) Icon(name string) string {
 	return name + ".ico"
 }

@@ -11,4 +11,5 @@ require (
 	github.com/mitchellh/go-ps v0.0.0-20190716172923-621e5597135b
 	github.com/skratchdot/open-golang v0.0.0-20190402232053-79abb63cd66e
 	golang.org/x/sys v0.0.0-20190913121621-c3b328c6e5a7 // indirect
+	src.techknowlogick.com/xgo v0.0.0-20190904182048-b4fba6551e4a // indirect
 )

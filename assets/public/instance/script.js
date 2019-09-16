@@ -10,18 +10,13 @@ function renderSettings(settings) {
         options.appendChild(optionalMod(option, settings["options"]));
     });
 
+    options.appendChild(removeButton(settings));
+
     document.getElementById("back").addEventListener("click", function () {
         var path = "/api/instance/" + settings["name"];
         var body = JSON.stringify(settings);
         post(path, body, function () {
             nav("../home");
-        });
-    });
-
-    document.getElementById("delete").addEventListener("click", function () {
-        var path = "/api/instance/" + settings["name"];
-        del(path, function () {
-            nav("/home");
         });
     });
 
@@ -56,7 +51,7 @@ function gameDir(settings) {
                     type: "button", class: "secondary open-button", value: "Open", events: {
                         click: function () {
                             var data = {name: settings["game_dir"]};
-                            post("/api/open/folder", JSON.stringify(data));
+                            post("/api/folder/open", JSON.stringify(data));
                         }
                     }
                 })
@@ -103,6 +98,23 @@ function optionalMod(option, options) {
                 }
             }),
             Render.el("span", {class: "switch"})
+        ]),
+    ]);
+}
+
+function removeButton(settings) {
+    return Render.el("div", {class: "option theme-row"}, [
+        Render.el("div", {class: "button-container"}, [
+            Render.el("input", {
+                type: "button", class: "warning", value: "Remove Instance", events: {
+                    click: function () {
+                        var path = "/api/instance/" + settings["name"];
+                        del(path, function () {
+                            nav("/home");
+                        });
+                    }
+                }
+            })
         ]),
     ]);
 }

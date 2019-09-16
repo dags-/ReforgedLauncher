@@ -5,9 +5,7 @@ import (
 	"flag"
 	"io"
 	"log"
-	"net/http"
 	"os"
-	"os/user"
 
 	"github.com/GeertJohan/go.rice"
 	"github.com/marcsauter/single"
@@ -16,6 +14,8 @@ import (
 	"github.com/Conquest-Reforged/ReforgedLauncher/ui"
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/errs"
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/files"
+	"github.com/Conquest-Reforged/ReforgedLauncher/utils/platform"
+	"github.com/Conquest-Reforged/ReforgedLauncher/utils/tasks"
 )
 
 const (
@@ -38,15 +38,11 @@ func main() {
 }
 
 func startMaster() {
-	// get user
-	u, e := user.Current()
-	errs.Panic("User", e)
-
 	// init properties
 	var properties launcher.Properties
 	properties.Branding = BRANDING
 	properties.ModPacksURL = MODPACKS
-	properties.AppDir = files.MustDir(u.HomeDir, "AppData", "Local", BRANDING)
+	properties.AppDir = platform.AppDir(BRANDING)
 
 	// ensure only one instance of the app - trigger the /api/open endpoint if already running
 	s := holdLock(properties)
@@ -80,13 +76,8 @@ func holdLock(props launcher.Properties) *single.Single {
 	e := s.CheckLock()
 	if e != nil {
 		c := ui.Load(props.AppDir)
-		r, e := http.Get(c.LastURL + "/api/open/window")
-		if e == nil {
-			defer files.Close(r.Body)
-			os.Exit(0)
-		} else {
-			panic(e)
-		}
+		tasks.Trigger(c.LastURL + "/api/window/open")
+		os.Exit(0)
 	}
 	return s
 }

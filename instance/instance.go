@@ -1,6 +1,7 @@
 package instance
 
 import (
+	"path/filepath"
 	"time"
 
 	"github.com/Conquest-Reforged/ReforgedLauncher/instance/forge"
@@ -9,6 +10,7 @@ import (
 	"github.com/Conquest-Reforged/ReforgedLauncher/instance/repo"
 	"github.com/Conquest-Reforged/ReforgedLauncher/modpack"
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/files"
+	"github.com/Conquest-Reforged/ReforgedLauncher/utils/platform"
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/progress"
 )
 
@@ -84,9 +86,13 @@ func (i *Instance) Prepare(installation *modpack.Installation, listener progress
 	return nil
 }
 
+func DefaultGameDir(name string) string {
+	return filepath.Join(platform.Home(), "Documents", "ModPacks", name)
+}
+
 func (i *Instance) gameDir() string {
 	if i.GameDir == "" {
-		return files.MustDir(i.AppDir, "ModPacks", i.ModPack.Repo.Name)
+		return DefaultGameDir(i.Name)
 	}
 	return i.GameDir
 }

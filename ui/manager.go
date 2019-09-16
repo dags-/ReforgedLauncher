@@ -1,6 +1,7 @@
 package ui
 
 import (
+	"log"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -8,7 +9,6 @@ import (
 	"sync"
 
 	rice "github.com/GeertJohan/go.rice"
-	"github.com/dags-/systray"
 
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/errs"
 )
@@ -124,9 +124,11 @@ func (m *Manager) Exit() {
 	m.lock.Lock()
 	defer m.lock.Unlock()
 	if m.window != nil {
-		m.window.Exit()
-		m.window = nil
+		log.Println("Closing window")
+		terminate(m.window)
 	}
-	systray.Quit()
+
+	log.Println("Stopping")
+	defer log.Println("Stopped")
 	os.Exit(0)
 }

@@ -6,6 +6,21 @@ window.addEventListener("load", function () {
     });
 });
 
+window.addEventListener("resize", function() {
+    clearTimeout(resizeHandle);
+
+    resizeHandle = setTimeout(onResize, 750);
+});
+
+var resizeHandle;
+
+function onResize() {
+    post("/api/save/window", JSON.stringify({
+        "window_width": window.innerWidth,
+        "window_height": window.innerHeight,
+    }));
+}
+
 function path() {
     return window.location.href.split("#")[1] || "";
 }

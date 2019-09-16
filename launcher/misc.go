@@ -5,11 +5,16 @@ import (
 
 	"github.com/skratchdot/open-golang/open"
 
+	"github.com/Conquest-Reforged/ReforgedLauncher/ui"
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/files"
 )
 
 func (l *Launcher) openWindow(w http.ResponseWriter, r *http.Request) {
-	l.wm.Home()
+	if l.wm.HasWindow() {
+		return
+	}
+	config := ui.Load(l.AppDir)
+	l.launchWindow(config.AutoLaunch)
 }
 
 func (l *Launcher) openFolder(w http.ResponseWriter, r *http.Request) {
@@ -23,4 +28,20 @@ func (l *Launcher) openFolder(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	fail(w, e)
+}
+
+func (l *Launcher) saveWindow(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodPost {
+		var cfg ui.Config
+		e := files.ParseJson(r.Body, &cfg)
+		if e == nil {
+			config := ui.Load(l.AppDir)
+			config.WindowWidth = cfg.WindowWidth
+			config.WindowHeight = cfg.WindowHeight
+			ui.Save(l.AppDir, config)
+			success(w, "saved")
+		} else {
+			fail(w, e)
+		}
+	}
 }

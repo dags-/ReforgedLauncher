@@ -10,6 +10,13 @@ import (
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/progress"
 )
 
+func Trigger(url string) {
+	r, e := http.Get(url)
+	if e == nil {
+		defer files.Close(r.Body)
+	}
+}
+
 func Download(url, path string, listener progress.Listener) error {
 	out, e := os.Create(files.MustFile(path))
 	if e != nil {

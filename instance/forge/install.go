@@ -3,6 +3,7 @@ package forge
 import (
 	"bufio"
 	"fmt"
+	"html"
 	"os/exec"
 	"path/filepath"
 	"strings"
@@ -56,7 +57,10 @@ func installForge(i *modpack.Installation, wrapper, installer string, listener p
 	s := bufio.NewScanner(out)
 	listener.TaskProgress(-1)
 	for s.Scan() {
-		listener.TaskStatus(strings.TrimSpace(s.Text()))
+		text := s.Text()
+		text = strings.TrimSpace(text)
+		text = html.EscapeString(text)
+		listener.TaskStatus(text)
 	}
 
 	return nil

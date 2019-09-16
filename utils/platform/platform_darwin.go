@@ -13,6 +13,10 @@ var platform = &darwin{}
 type darwin struct {
 }
 
+func (d darwin) AppDir(name string) string {
+	return files.MustDir(Home(), "Library", "Application Support", name)
+}
+
 func (d darwin) Icon(name string) string {
 	return name + ".png"
 }

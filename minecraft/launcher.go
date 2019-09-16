@@ -37,7 +37,7 @@ func Install(appDir string, listener progress.Listener) (*MojangLauncher, error)
 }
 
 func (l *MojangLauncher) Launch(i *modpack.Installation) *exec.Cmd {
-	cmd := platform.LaunchCmd(l.path, i.AppDir)
+	cmd := platform.LaunchCmd(l.path, i.GameDir)
 	cmd.Dir = i.AppDir
 	return cmd
 }

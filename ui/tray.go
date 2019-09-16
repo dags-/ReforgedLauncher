@@ -2,6 +2,7 @@ package ui
 
 import (
 	"io/ioutil"
+	"log"
 
 	"github.com/dags-/systray"
 
@@ -22,10 +23,21 @@ func (m *Manager) ready() {
 	}
 
 	auto := systray.AddMenuItem("Auto Launch", "")
+	open := systray.AddMenuItem("Open", "")
 	exit := systray.AddMenuItem("Quit", "")
+
+	if Load(m.appDir).AutoLaunch {
+		auto.Check()
+	}
+
 	for {
 		select {
 		case <-systray.ClickedCh:
+			if !m.HasWindow() {
+				m.Home()
+			}
+			break
+		case <-open.ClickedCh:
 			if !m.HasWindow() {
 				m.Home()
 			}
@@ -36,14 +48,19 @@ func (m *Manager) ready() {
 			} else {
 				auto.Check()
 			}
+			config := Load(m.appDir)
+			config.AutoLaunch = auto.Checked()
+			Save(m.appDir, config)
 			break
 		case <-exit.ClickedCh:
-			m.Exit()
+			systray.Quit()
 			return
 		}
 	}
 }
 
 func (m *Manager) exit() {
-
+	log.Println("Stopping")
+	defer log.Println("Stopped")
+	m.Exit()
 }
