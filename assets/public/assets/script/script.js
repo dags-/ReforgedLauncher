@@ -15,7 +15,7 @@ window.addEventListener("resize", function() {
 var resizeHandle;
 
 function onResize() {
-    post("/api/save/window", JSON.stringify({
+    post("/api/window/save", JSON.stringify({
         "window_width": window.innerWidth,
         "window_height": window.innerHeight,
     }));
