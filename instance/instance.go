@@ -2,7 +2,6 @@ package instance
 
 import (
 	"fmt"
-	"os"
 	"path/filepath"
 	"time"
 
@@ -14,6 +13,7 @@ import (
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/files"
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/platform"
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/progress"
+	"github.com/Conquest-Reforged/ReforgedLauncher/utils/tasks"
 )
 
 type Meta struct {
@@ -79,7 +79,7 @@ func (i *Instance) Prepare(installation *modpack.Installation, listener progress
 		e = forge.Install(installation, listener)
 		if e != nil {
 			fmt.Println(e)
-			os.Exit(0)
+			tasks.Shutdown()
 			return e
 		}
 		listener.TaskStatus("")

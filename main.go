@@ -77,7 +77,7 @@ func holdLock(props launcher.Properties) *single.Single {
 	if e != nil {
 		c := ui.Load(props.AppDir)
 		tasks.Trigger(c.LastURL + "/api/window/open")
-		os.Exit(0)
+		tasks.Shutdown()
 	}
 	return s
 }

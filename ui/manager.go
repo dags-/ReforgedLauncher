@@ -3,7 +3,6 @@ package ui
 import (
 	"log"
 	"net/http"
-	"os"
 	"path/filepath"
 	"sync"
 
@@ -11,6 +10,7 @@ import (
 
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/errs"
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/platform"
+	"github.com/Conquest-Reforged/ReforgedLauncher/utils/tasks"
 )
 
 type Manager struct {
@@ -123,7 +123,5 @@ func (m *Manager) Exit() {
 		terminate(m.window)
 	}
 
-	log.Println("Stopping")
-	defer log.Println("Stopped")
-	os.Exit(0)
+	tasks.Shutdown()
 }

@@ -17,6 +17,7 @@ import (
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/files"
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/platform"
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/progress"
+	"github.com/Conquest-Reforged/ReforgedLauncher/utils/tasks"
 )
 
 func Install(i *modpack.Installation, listener progress.Listener) error {
@@ -62,7 +63,7 @@ func installForge(i *modpack.Installation, wrapper, installer string, listener p
 	profile.Init(i)
 
 	// run forge installer
-	return cmd.Run()
+	return tasks.Run(cmd)
 }
 
 func buildCommand(java *minecraft.Runtime, classpath, gameDir string) *exec.Cmd {

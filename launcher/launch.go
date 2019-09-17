@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/Conquest-Reforged/ReforgedLauncher/minecraft"
+	"github.com/Conquest-Reforged/ReforgedLauncher/utils/tasks"
 )
 
 func (l *Launcher) run(w http.ResponseWriter, r *http.Request) {
@@ -75,7 +76,7 @@ func (l *Launcher) Launch(id string) {
 	listener.Wait()
 
 	// run mojang launcher
-	e = launcher.Command(installation).Start()
+	e = tasks.Start(launcher.Command(installation))
 	if e != nil {
 		l.onError("Command", "Command instance", e)
 		return

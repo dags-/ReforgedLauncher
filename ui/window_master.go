@@ -12,6 +12,7 @@ import (
 
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/errs"
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/files"
+	"github.com/Conquest-Reforged/ReforgedLauncher/utils/tasks"
 )
 
 var (
@@ -99,7 +100,7 @@ func startWindow(settings *Settings) (*Window, error) {
 		return nil, e
 	}
 
-	e = cmd.Start()
+	e = tasks.Start(cmd)
 	if e != nil {
 		return nil, e
 	}
@@ -146,7 +147,10 @@ func terminate(w *Window) {
 		w.l.Lock()
 
 		// close events channel, allows handleEvents to die
-		close(w.events)
+		if w.events != nil {
+			close(w.events)
+			w.events = nil
+		}
 	}
 	defer w.l.Unlock()
 
