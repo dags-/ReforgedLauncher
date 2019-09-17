@@ -2,7 +2,6 @@
   "name": "ReforgedLauncher",
   "version": "1.0.0",
   "identifier": "me.dags.reforged",
-  "icon": ".graphics/icon.png",
   "output": ".builds",
   "setup": [
     "go get github.com/josephspurrier/goversioninfo",
@@ -17,11 +16,13 @@
     },
     "linux/amd64": {
       "flags": ["-s -w"],
+      "icon": ".graphics/icon.png",
       "meta": {
         "categories": "Game"
       }
     },
     "windows/amd64": {
+      "icon": ".graphics/icon.ico",
       "generate": ["go run github.com/josephspurrier/goversioninfo/cmd/goversioninfo -64"],
       "flags": ["-H=windowsgui -s -w"]
     }

@@ -7,51 +7,81 @@ jobs:
     runs-on: windows-latest
     steps:
 
-    - name: Set up Go 1.13
-      uses: actions/setup-go@v1
-      with:
-        go-version: 1.13
-      id: go
+      - name: Set up Go 1.13
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.13
+        id: go
 
-    - name: Check out code into the Go module directory
-      uses: actions/checkout@v1
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v1
 
-    - name: Get dependencies
-      run: go get -v -t -d ./...
+      - name: Get dependencies
+        run: go get -v -t -d ./...
 
-    - name: Build
-      run: |
-        go get github.com/dags-/bundler
-        go run github.com/dags-/bundler -native
-
-    - uses: actions/upload-artifact@master
-      with:
-        name: windows
-        path: .builds/windows
+      - name: Build
+        run: |
+          go get -u github.com/dags-/bundler
+          go run github.com/dags-/bundler -native
+      - uses: actions/upload-artifact@master
+        with:
+          name: windows
+          path: .builds/windows
 
   macOS:
     name: macOS
     runs-on: macOS-latest
     steps:
 
-    - name: Set up Go 1.13
-      uses: actions/setup-go@v1
-      with:
-        go-version: 1.13
-      id: go
+      - name: Set up Go 1.13
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.13
+        id: go
 
-    - name: Check out code into the Go module directory
-      uses: actions/checkout@v1
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v1
 
-    - name: Get dependencies
-      run: go get -v -t -d ./...
+      - name: Get dependencies
+        run: go get -v -t -d ./...
 
-    - name: Build
-      run: |
-        go get github.com/dags-/bundler
-        go run github.com/dags-/bundler -native
+      - name: Build
+        run: |
+          go get -u github.com/dags-/bundler
+          go run github.com/dags-/bundler -native
+      - uses: actions/upload-artifact@master
+        with:
+          name: macOS
+          path: .builds/darwin
 
-    - uses: actions/upload-artifact@master
-      with:
-        name: macOS
-        path: .builds/darwin
+  linux:
+    name: linux
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Set up Go 1.13
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.13
+        id: go
+
+      - name: Set up webkit
+        run: |
+          sudo add-apt-repository ppa:webkit-team/ppa -y
+          sudo apt-get update
+          sudo apt-get install libwebkit2gtk-4.0-dev -y
+
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v1
+
+      - name: Get dependencies
+        run: go get -v -t -d ./...
+
+      - name: Build
+        run: |
+          go get -u github.com/dags-/bundler
+          go run github.com/dags-/bundler -native
+      - uses: actions/upload-artifact@master
+        with:
+          name: linux
+          path: .builds/linux
