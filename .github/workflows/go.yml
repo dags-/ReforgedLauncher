@@ -18,14 +18,17 @@ jobs:
 
     - name: Get dependencies
       run: go get -v -t -d ./...
-
-    - name: Get bundler
-      run: go install github.com/dags-/bundler
+      
+    - name: Embed
+      run: |
+        go get github.com/GeertJohan/go.rice
+        go get github.com/GeertJohan/go.rice/rice
+        go generate
 
     - name: Build
-      run: go run github.com/dags-/bundler -native
+      run: go build
 
     - uses: actions/upload-artifact@master
       with:
-        name: ev-windows
+        name: windows
         path: .builds/windows
