@@ -5,7 +5,10 @@
   "icon": ".graphics/icon.png",
   "output": ".builds",
   "setup": [
-    "rice embed-go"
+    "go get github.com/josephspurrier/goversioninfo",
+    "go get github.com/GeertJohan/go.rice",
+    "go get github.com/GeertJohan/go.rice/rice",
+    "go run github.com/GeertJohan/go.rice/rice embed-go"
   ],
   "targets": {
     "darwin/amd64": {
@@ -19,7 +22,7 @@
       }
     },
     "windows/amd64": {
-      "generate": ["goversioninfo -64"],
+      "generate": ["go run github.com/josephspurrier/goversioninfo/cmd/goversioninfo -64"],
       "flags": ["-H=windowsgui -s -w"]
     }
   }
