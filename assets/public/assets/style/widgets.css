@@ -1,6 +1,7 @@
 input {
     flex-grow: 1;
-    padding: 1.25em 1.5em;
+    padding: 1.25vh 1.5em;
+    min-height: 30px;
     border: none;
     cursor: pointer;
 }
@@ -29,7 +30,8 @@ input:hover {
 
 input[type="button"] {
     border: none;
-    padding: 1.5vw 4vw;
+    padding: 1.25vh 4vw;
+    /*max-height: 20px;*/
     outline: none !important;
 }
 
@@ -75,10 +77,10 @@ input[type="button"]:active {
     border: 1px solid #999;
 }
 
-input[type="checkbox"] .switch {
+.switch-container input[type="checkbox"] {
     opacity: 0;
     width: 0;
-    height: 0;
+    height: 0 !important;
 }
 
 input[type="checkbox"]:checked + .switch {
