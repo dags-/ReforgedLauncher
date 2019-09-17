@@ -56,7 +56,7 @@ jobs:
 
   linux:
     name: linux
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-16.04
     steps:
 
       - name: Set up Go 1.13
@@ -67,8 +67,8 @@ jobs:
 
       - name: Set up webkit
         run: |
-          sudo add-apt-repository ppa:webkit-team/ppa -y
-          sudo apt-get update
+          sudo add-apt-repository -r ppa:webkit-team/ppa -y
+          sudo apt-get update -q
           sudo apt-get install libwebkit2gtk-4.0-dev -y
 
       - name: Check out code into the Go module directory
