@@ -24,7 +24,7 @@ type AppMeta struct {
 }
 
 type JavaMeta struct {
-	JRE *RuntimeMeta `json:"jdk"`
+	JRE *RuntimeMeta `json:"jre"`
 }
 
 type RuntimeMeta struct {

@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"html"
 	"io"
-	"log"
 	"os/exec"
 	"path/filepath"
 	"runtime"
@@ -51,6 +50,9 @@ func installForge(i *modpack.Installation, wrapper, installer string, listener p
 		return fmt.Errorf("java not installed %s", e)
 	}
 
+	// negative number == indeterminate progress bar
+	listener.TaskProgress(-1)
+
 	// add the wrapper and installer jars to the classpath
 	classpath := buildClassPath(wrapper, installer)
 	cmd := buildCommand(r, classpath, i.GameDir)
@@ -67,18 +69,6 @@ func buildCommand(java *minecraft.Runtime, classpath, gameDir string) *exec.Cmd 
 	cmd := java.Command("-classpath", classpath, "Main", gameDir)
 	platform.HideConsole(cmd)
 	return cmd
-}
-
-func IsJavaInstalled() bool {
-	jv, err := exec.LookPath("java")
-
-	if err != nil {
-		log.Fatalln("Java has not been found!")
-		return false
-	} else {
-		log.Printf("Java has been found at: %s\n", jv)
-		return true
-	}
 }
 
 func buildClassPath(wrapper, installer string) string {
