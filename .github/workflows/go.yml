@@ -23,7 +23,7 @@ jobs:
       run: |
         go get github.com/GeertJohan/go.rice
         go get github.com/GeertJohan/go.rice/rice
-        rice embed-go
+        go run github.com/GeertJohan/go.rice/rice embed-go
 
     - name: Build
       run: go build -o builds/ReforgedLauncher.exe
