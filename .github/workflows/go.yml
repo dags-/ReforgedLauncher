@@ -3,7 +3,7 @@ on: [push]
 jobs:
 
   windows:
-    name: Windows
+    name: windows
     runs-on: windows-latest
     steps:
 
@@ -51,7 +51,7 @@ jobs:
           go run github.com/dags-/bundler -native
       - uses: actions/upload-artifact@master
         with:
-          name: macOS
+          name: mac
           path: .builds/darwin
 
   linux:
@@ -70,6 +70,7 @@ jobs:
           sudo add-apt-repository -r ppa:webkit-team/ppa -y
           sudo apt-get update -q
           sudo apt-get install libwebkit2gtk-4.0-dev -y
+          sudo apt install libappindicator3-dev gir1.2-appindicator3-0.1 -y
 
       - name: Check out code into the Go module directory
         uses: actions/checkout@v1
