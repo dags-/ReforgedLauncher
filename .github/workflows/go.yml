@@ -28,3 +28,30 @@ jobs:
       with:
         name: windows
         path: .builds/windows
+
+  macOS:
+    name: macOS
+    runs-on: macOS-latest
+    steps:
+
+    - name: Set up Go 1.13
+      uses: actions/setup-go@v1
+      with:
+        go-version: 1.13
+      id: go
+
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v1
+
+    - name: Get dependencies
+      run: go get -v -t -d ./...
+
+    - name: Build
+      run: |
+        go get github.com/dags-/bundler
+        go run github.com/dags-/bundler -native
+
+    - uses: actions/upload-artifact@master
+      with:
+        name: macOS
+        path: .builds/darwin
