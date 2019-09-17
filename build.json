@@ -1,7 +1,7 @@
 {
   "name": "ReforgedLauncher",
   "version": "1.0.0",
-  "identifier": "me.dags.reforged",
+  "identifier": "com.conquestreforged.launcher",
   "output": ".builds",
   "setup": [
     "go get github.com/josephspurrier/goversioninfo",
