@@ -18,17 +18,13 @@ jobs:
 
     - name: Get dependencies
       run: go get -v -t -d ./...
-      
-    - name: Embed
-      run: |
-        go get github.com/GeertJohan/go.rice
-        go get github.com/GeertJohan/go.rice/rice
-        go run github.com/GeertJohan/go.rice/rice embed-go
 
     - name: Build
-      run: go build -o builds/ReforgedLauncher.exe
+      run: |
+        go get github.com/dags-/bundler
+        go run github.com/dags-/bundler -native
 
     - uses: actions/upload-artifact@master
       with:
         name: windows
-        path: builds
+        path: .builds/windows
