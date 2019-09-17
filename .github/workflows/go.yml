@@ -26,9 +26,9 @@ jobs:
         go generate
 
     - name: Build
-      run: go build
+      run: go build -o builds/ReforgedLauncher.exe
 
     - uses: actions/upload-artifact@master
       with:
         name: windows
-        path: .builds/windows
+        path: builds
