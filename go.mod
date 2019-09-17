@@ -4,6 +4,7 @@ go 1.13
 
 require (
 	github.com/GeertJohan/go.rice v1.0.0
+	github.com/andrew-d/lzma v0.0.0-20120628231508-2a7c55cad4a2
 	github.com/dags-/systray v0.0.0-20190913174533-af2e7304ee7c
 	github.com/dags-/webview v0.0.0-20190916205800-dc1a09954190
 	github.com/getlantern/golog v0.0.0-20190830074920-4ef2e798c2d7 // indirect

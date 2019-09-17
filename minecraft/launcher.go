@@ -1,43 +1,59 @@
 package minecraft
 
 import (
-	"fmt"
+	"errors"
 	"os/exec"
 
 	"github.com/Conquest-Reforged/ReforgedLauncher/modpack"
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/files"
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/platform"
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/progress"
+	"github.com/Conquest-Reforged/ReforgedLauncher/utils/tasks"
 )
 
-type MojangLauncher struct {
+type Launcher struct {
 	path string
 }
 
-func Launcher(appDir string) (*MojangLauncher, error) {
-	path := files.MustFile(appDir, "Launcher", platform.LauncherName())
-	if !files.Exists(path) {
-		return nil, fmt.Errorf("mojang launcher not found")
-	}
-	return &MojangLauncher{path: path}, nil
+func (l *Launcher) Command(i *modpack.Installation) *exec.Cmd {
+	cmd := platform.RunExecutable(l.path, "--workDir", i.GameDir)
+	cmd.Dir = i.AppDir
+	return cmd
 }
 
-func Install(appDir string, listener progress.Listener) (*MojangLauncher, error) {
-	file, e := download(appDir, listener)
+func installLauncher(appDir string, listener progress.Listener) (string, error) {
+	file, e := downloadLauncher(appDir, listener)
 	if e != nil {
-		return nil, e
+		return "", e
 	}
 
 	file, e = platform.ExtractLauncher(file, listener)
 	if e != nil {
-		return nil, e
+		return "", e
 	}
 
-	return &MojangLauncher{path: file}, nil
+	return file, nil
 }
 
-func (l *MojangLauncher) Launch(i *modpack.Installation) *exec.Cmd {
-	cmd := platform.RunExecutable(l.path, "--workDir", i.GameDir)
-	cmd.Dir = i.AppDir
-	return cmd
+func downloadLauncher(appDir string, listener progress.Listener) (string, error) {
+	m, e := getMeta()
+	if e != nil {
+		return "", e
+	}
+
+	link := m.getAppLink()
+	path := files.TempFile(appDir, "Launcher")
+
+	listener.GlobalStatus("Downloading Minecraft launcher")
+	e = tasks.Download(link.AppLink, path, listener)
+	if e != nil {
+		return "", e
+	}
+
+	listener.GlobalStatus("Checking hash")
+	if !files.CheckMD5(path, link.DownloadHash) {
+		return "", errors.New("invalid md5 hash")
+	}
+
+	return path, nil
 }

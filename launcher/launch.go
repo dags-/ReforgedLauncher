@@ -25,7 +25,7 @@ func (l *Launcher) Launch(id string) {
 	listener.Stat("Loading instance", 0.2)
 	instance, e := l.Instance(id)
 	if e != nil {
-		l.onError("Launch", "Load instance", e)
+		l.onError("Command", "Load instance", e)
 		return
 	}
 
@@ -36,7 +36,7 @@ func (l *Launcher) Launch(id string) {
 	listener.Stat("Installing modpack", 0.4)
 	e = instance.InstallPack(l.r, listener)
 	if e != nil {
-		l.onError("Launch", "Install pack", e)
+		l.onError("Command", "Install pack", e)
 		return
 	}
 
@@ -45,7 +45,7 @@ func (l *Launcher) Launch(id string) {
 	installation := instance.Installation(l.r)
 	e = instance.Prepare(installation, listener)
 	if e != nil {
-		l.onError("Launch", "Prepare launch", e)
+		l.onError("Command", "Prepare launch", e)
 		return
 	}
 
@@ -53,28 +53,31 @@ func (l *Launcher) Launch(id string) {
 	instance.LastUsed = time.Now()
 	e = l.SaveInstance(instance)
 	if e != nil {
-		l.onError("Launch", "Save instance", e)
+		l.onError("Command", "Save instance", e)
+		return
+	}
+
+	// init minecraft
+	mc, e := minecraft.Get(l.AppDir)
+	if e != nil {
+		l.onError("Minecraft", "Load minecraft", e)
 		return
 	}
 
 	// get mojang launcher
-	launcher, e := minecraft.Launcher(l.AppDir)
+	launcher, e := mc.GetLauncher(listener)
 	if e != nil {
-		listener.Stat("Installing minecraft launcher", 0.9)
-		launcher, e = minecraft.Install(l.AppDir, listener)
-		if e != nil {
-			l.onError("Launch", "Install mojang launcher", e)
-			return
-		}
+		l.onError("Command", "Install mojang launcher", e)
+		return
 	}
 
 	listener.Stat("Launching", 1.0)
 	listener.Wait()
 
 	// run mojang launcher
-	e = launcher.Launch(installation).Start()
+	e = launcher.Command(installation).Start()
 	if e != nil {
-		l.onError("Launch", "Launch instance", e)
+		l.onError("Command", "Command instance", e)
 		return
 	}
 

@@ -7,6 +7,7 @@ import (
 	"github.com/dags-/systray"
 
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/errs"
+	"github.com/Conquest-Reforged/ReforgedLauncher/utils/tasks"
 )
 
 func (m *Manager) RunTray() {
@@ -22,8 +23,9 @@ func (m *Manager) ready() {
 		errs.Log("Load icon", e)
 	}
 
-	auto := systray.AddMenuItem("Auto Launch", "")
+	auto := systray.AddMenuItem("Quick Launch", "")
 	open := systray.AddMenuItem("Open", "")
+	launch := systray.AddMenuItem("Launch", "")
 	exit := systray.AddMenuItem("Quit", "")
 
 	if Load(m.appDir).AutoLaunch {
@@ -34,7 +36,8 @@ func (m *Manager) ready() {
 		select {
 		case <-systray.ClickedCh:
 			if !m.HasWindow() {
-				m.Home()
+				c := Load(m.appDir)
+				tasks.Trigger(c.LastURL + "/api/window/open")
 			}
 			break
 		case <-open.ClickedCh:
@@ -42,6 +45,11 @@ func (m *Manager) ready() {
 				m.Home()
 			}
 			break
+		case <-launch.ClickedCh:
+			if !m.HasWindow() {
+				c := Load(m.appDir)
+				tasks.Trigger(c.LastURL + "/api/window/open?quick=true")
+			}
 		case <-auto.ClickedCh:
 			if auto.Checked() {
 				auto.Uncheck()

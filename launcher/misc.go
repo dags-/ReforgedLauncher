@@ -13,8 +13,14 @@ func (l *Launcher) openWindow(w http.ResponseWriter, r *http.Request) {
 	if l.wm.HasWindow() {
 		return
 	}
-	config := ui.Load(l.AppDir)
-	l.launchWindow(config.AutoLaunch)
+	_ = r.ParseForm()
+	quick := r.FormValue("quick")
+	if quick == "true" {
+		l.launchWindow(true)
+	} else {
+		config := ui.Load(l.AppDir)
+		l.launchWindow(config.AutoLaunch)
+	}
 }
 
 func (l *Launcher) openFolder(w http.ResponseWriter, r *http.Request) {

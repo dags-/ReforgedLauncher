@@ -4,13 +4,17 @@ import (
 	"bufio"
 	"fmt"
 	"html"
+	"io"
+	"log"
 	"os/exec"
 	"path/filepath"
 	"runtime"
 	"strings"
 
 	"github.com/Conquest-Reforged/ReforgedLauncher/instance/profile"
+	"github.com/Conquest-Reforged/ReforgedLauncher/minecraft"
 	"github.com/Conquest-Reforged/ReforgedLauncher/modpack"
+	"github.com/Conquest-Reforged/ReforgedLauncher/utils/errs"
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/files"
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/platform"
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/progress"
@@ -37,40 +41,44 @@ func Install(i *modpack.Installation, listener progress.Listener) error {
 }
 
 func installForge(i *modpack.Installation, wrapper, installer string, listener progress.Listener) error {
-	// add the wrapper and installer jars to the classpath
-	classpath := buildClassPath(wrapper, installer)
-	cmd := buildCommand(classpath, i.GameDir)
-	out, e := cmd.StdoutPipe()
+	mc, e := minecraft.Get(i.AppDir)
 	if e != nil {
 		return e
 	}
+
+	r, e := mc.GetRuntime(listener)
+	if e != nil {
+		return fmt.Errorf("java not installed %s", e)
+	}
+
+	// add the wrapper and installer jars to the classpath
+	classpath := buildClassPath(wrapper, installer)
+	cmd := buildCommand(r, classpath, i.GameDir)
+	drain(cmd, listener)
 
 	// forge installer needs the launcher_profiles.json to be present
 	profile.Init(i)
 
-	// launch the forge installer
-	e = cmd.Start()
-	if e != nil {
-		return e
-	}
-
-	// read the process output and feedback into this app
-	s := bufio.NewScanner(out)
-	listener.TaskProgress(-1)
-	for s.Scan() {
-		text := s.Text()
-		text = strings.TrimSpace(text)
-		text = html.EscapeString(text)
-		listener.TaskStatus(text)
-	}
-
-	return nil
+	// run forge installer
+	return cmd.Run()
 }
 
-func buildCommand(classpath, gameDir string) *exec.Cmd {
-	cmd := exec.Command("java", "-classpath", classpath, "Main", gameDir)
+func buildCommand(java *minecraft.Runtime, classpath, gameDir string) *exec.Cmd {
+	cmd := java.Command("-classpath", classpath, "Main", gameDir)
 	platform.HideConsole(cmd)
 	return cmd
+}
+
+func IsJavaInstalled() bool {
+	jv, err := exec.LookPath("java")
+
+	if err != nil {
+		log.Fatalln("Java has not been found!")
+		return false
+	} else {
+		log.Printf("Java has been found at: %s\n", jv)
+		return true
+	}
 }
 
 func buildClassPath(wrapper, installer string) string {
@@ -86,4 +94,29 @@ func findForgeInstaller(i *modpack.Installation) (string, bool) {
 		return "", false
 	}
 	return matches[0], true
+}
+
+func drain(cmd *exec.Cmd, listener progress.Listener) {
+	out, e := cmd.StdoutPipe()
+	errs.Log("StdoutPipe", e)
+	if e == nil {
+		go drainOutput(out, listener)
+	}
+
+	err, e := cmd.StderrPipe()
+	errs.Log("StderrPipe", e)
+	if e == nil {
+		go drainOutput(err, listener)
+	}
+}
+
+func drainOutput(r io.ReadCloser, listener progress.Listener) {
+	defer files.Close(r)
+	s := bufio.NewScanner(r)
+	for s.Scan() {
+		text := s.Text()
+		text = strings.TrimSpace(text)
+		text = html.EscapeString(text)
+		listener.TaskStatus(text)
+	}
 }

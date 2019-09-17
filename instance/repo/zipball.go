@@ -36,15 +36,18 @@ func (z *ZipBall) Extract(dest string, listener progress.Listener) error {
 	for _, f := range r.File {
 		if f.FileInfo().IsDir() {
 			count++
+			ch <- count / total
 			continue
 		}
 
 		action := fixPath(dest, z.getAction(f))
 		listener.TaskStatus("Extracting file: " + f.Name)
 		e := action(f.Name, f)
+
 		if e != nil {
 			return e
 		}
+
 		count++
 		ch <- count / total
 	}

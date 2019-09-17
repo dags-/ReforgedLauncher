@@ -3,17 +3,19 @@ package main
 import (
 	"encoding/json"
 	"flag"
+	"io"
+	"log"
+	"os"
+
+	"github.com/GeertJohan/go.rice"
+	"github.com/marcsauter/single"
+
 	"github.com/Conquest-Reforged/ReforgedLauncher/launcher"
 	"github.com/Conquest-Reforged/ReforgedLauncher/ui"
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/errs"
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/files"
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/platform"
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/tasks"
-	"github.com/GeertJohan/go.rice"
-	"github.com/marcsauter/single"
-	"io"
-	"log"
-	"os"
 )
 
 const (

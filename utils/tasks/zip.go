@@ -11,10 +11,14 @@ import (
 )
 
 func Unzip(path, dir string, listener progress.Listener) error {
-	return UnzipTrimFirst(path, dir, listener)
+	return unzip(path, dir, false, listener)
 }
 
 func UnzipTrimFirst(path, dir string, listener progress.Listener) error {
+	return unzip(path, dir, true, listener)
+}
+
+func unzip(path, dir string, trim bool, listener progress.Listener) error {
 	z, e := zip.OpenReader(path)
 	if e != nil {
 		return e
@@ -27,7 +31,7 @@ func UnzipTrimFirst(path, dir string, listener progress.Listener) error {
 	count := float64(0)
 	total := float64(len(z.File) - 1)
 	for _, f := range z.File {
-		e := extract(f, dir)
+		e := extract(f, dir, trim)
 		if e != nil {
 			return e
 		}
@@ -38,7 +42,7 @@ func UnzipTrimFirst(path, dir string, listener progress.Listener) error {
 	return nil
 }
 
-func extract(f *zip.File, dir string) error {
+func extract(f *zip.File, dir string, trim bool) error {
 	if f.FileInfo().IsDir() {
 		return nil
 	}
@@ -49,7 +53,11 @@ func extract(f *zip.File, dir string) error {
 	}
 	defer files.Close(r)
 
-	path := f.Name[strings.Index(f.Name, "/")+1:]
+	path := f.Name
+	if trim {
+		path = path[strings.Index(path, "/")+1:]
+	}
+
 	w, e := os.Create(files.MustFile(dir, path))
 	if e != nil {
 		return e
