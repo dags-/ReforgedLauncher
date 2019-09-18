@@ -34,6 +34,7 @@ func (l *Launcher) Run() {
 	l.wm.Handle("/api/folder/open", l.openFolder)
 	l.wm.Handle("/api/window/open", l.openWindow)
 	l.wm.Handle("/api/window/save", l.saveWindow)
+	l.wm.Handle("/api/home/scale", l.scale)
 	l.wm.StripPrefix("/api/run/", l.run)
 	l.wm.StripPrefix("/api/launch/", l.launch)
 	l.wm.StripPrefix("/api/install/", l.install)

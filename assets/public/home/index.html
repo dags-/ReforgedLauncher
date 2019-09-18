@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="../assets/style/style.css">
     <link rel="stylesheet" href="../assets/style/theme.css">
     <link rel="stylesheet" href="../assets/style/layout.css">
+    <link rel="stylesheet" href="../assets/style/widgets.css">
     <link rel="shortcut icon" href="../assets/image/icon.ico">
     <script src="../assets/script/script.js"></script>
     <script src="../assets/script/render.js"></script>
@@ -20,7 +21,11 @@
     </div>
     <div class="instances-container theme-shadow">
         <div class="heading">
-            Instances
+            <div class="heading-item">Instances</div>
+            <div class="heading-item">
+                <label for="scale"></label>
+                <input id="scale" class="slider" type="range" min="1" max="9" value="3">
+            </div>
         </div>
         <div id="instances" class="instance-list">
 
@@ -31,6 +36,9 @@
 <script>
     get("/api/instances", function(result) {
         renderModpacks(result["data"]);
+    });
+    get("/api/home/scale", function(result) {
+        loadScale(result["data"]);
     });
 </script>
 </html>

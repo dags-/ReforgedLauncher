@@ -6,19 +6,30 @@
 }
 
 .title-bar {
-    flex-grow: 1;
-    height: 15vh;
-    min-height: 50px;
-    max-height: 70px;
+    flex-grow: 0;
+    height: 4em;
+    min-height: 4em;
 }
 
 .heading {
+    display: flex;
     color: #eee;
     width: 90%;
     margin: auto;
     padding: 1.25vw;
     box-sizing: border-box;
     font-size: x-large;
+}
+
+.heading-item {
+    width: 100%;
+    flex-grow: 1;
+}
+
+.slider {
+    display: block;
+    max-width: 50%;
+    margin-left: auto;
 }
 
 .instances-container {

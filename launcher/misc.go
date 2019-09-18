@@ -51,3 +51,24 @@ func (l *Launcher) saveWindow(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 }
+
+func (l *Launcher) scale(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodGet {
+		config := ui.Load(l.AppDir)
+		success(w, config)
+		return
+	}
+
+	if r.Method == http.MethodPost {
+		var cfg ui.Config
+		e := files.ParseJson(r.Body, &cfg)
+		if e == nil {
+			config := ui.Load(l.AppDir)
+			config.HomeScale = cfg.HomeScale
+			ui.Save(l.AppDir, config)
+			success(w, "saved")
+		} else {
+			fail(w, e)
+		}
+	}
+}

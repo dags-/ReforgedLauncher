@@ -4,17 +4,24 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/Conquest-Reforged/ReforgedLauncher/utils/files"
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/tasks"
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/version"
 )
 
 const (
 	releasesUrl = `https://api.github.com/repos/%s/releases`
+	metaUrl     = `https://api.github.com/repos/%s/contents/meta`
 )
 
 type Repo struct {
 	Owner string
 	Name  string
+}
+
+type GitFile struct {
+	Name string `json:"name"`
+	URL  string `json:"download_url"`
 }
 
 func NewRepo(owner, name string) *Repo {
@@ -67,6 +74,21 @@ func (r *Repo) Get(v *version.Version) (*Remote, error) {
 		}
 	}
 	return nil, fmt.Errorf("version not found: %s", v)
+}
+
+func (r *Repo) CoverImage() string {
+	var contents []*GitFile
+	url := fmt.Sprintf(metaUrl, r.String())
+	e := tasks.GetJson(url, &contents)
+	if e != nil {
+		return ""
+	}
+	for _, f := range contents {
+		if files.IsImage(f.Name) {
+			return f.URL
+		}
+	}
+	return ""
 }
 
 func (r *Repo) String() string {

@@ -1,6 +1,8 @@
 package modpack
 
-import "github.com/Conquest-Reforged/ReforgedLauncher/utils/version"
+import (
+	"github.com/Conquest-Reforged/ReforgedLauncher/utils/version"
+)
 
 type ModPack struct {
 	Repo    *Repo            `json:"repo"`

@@ -4,39 +4,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"path/filepath"
-	"sort"
 	"time"
 
 	"github.com/Conquest-Reforged/ReforgedLauncher/instance"
-	"github.com/Conquest-Reforged/ReforgedLauncher/instance/repo"
 	"github.com/Conquest-Reforged/ReforgedLauncher/modpack"
-	"github.com/Conquest-Reforged/ReforgedLauncher/utils/files"
 )
-
-func (l *Launcher) instances(w http.ResponseWriter, r *http.Request) {
-	instances, e := l.Instances()
-	if e != nil {
-		fail(w, e)
-		return
-	}
-
-	rep := repo.Open(l.AppDir)
-	var metas []*instance.Meta
-	for _, i := range instances {
-		if rep.Has(i.ModPack) {
-			metas = append(metas, &instance.Meta{
-				ModPack: i.ModPack,
-				Name:    i.Name,
-				Pack:    i.ModPack.Repo.String(),
-				Cover1:  i.Image,
-				Cover2:  filepath.Join(rep.MetaDir(i.ModPack), "cover.jpg"),
-			})
-		}
-	}
-
-	success(w, metas)
-}
 
 func (l *Launcher) instance(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
@@ -82,7 +54,7 @@ func (l *Launcher) postInstance(w http.ResponseWriter, r *http.Request) {
 		if e == nil {
 			inst.GameDir = opts.GameDir
 			inst.Options = opts.Options
-			inst.Image = opts.Image
+			inst.UserImage = opts.UserImage
 			e = l.SaveInstance(inst)
 			if e == nil {
 				success(w, nil)
@@ -129,58 +101,14 @@ func (l *Launcher) Instance(id string) (*instance.Instance, error) {
 
 func (l *Launcher) NewInstance(id string, remote *modpack.Remote) *instance.Instance {
 	return &instance.Instance{
-		Name:     id,
-		Options:  nil,
-		AppDir:   l.AppDir,
-		ModPack:  remote.AsModPack(),
-		LastUsed: time.Now(),
-		GameDir:  instance.DefaultGameDir(id),
+		Name:      id,
+		Options:   nil,
+		AppDir:    l.AppDir,
+		ModPack:   remote.AsModPack(),
+		LastUsed:  time.Now(),
+		GameDir:   instance.DefaultGameDir(id),
+		RepoImage: remote.Repo().CoverImage(),
 	}
-}
-
-func (l *Launcher) Instances() ([]*instance.Instance, error) {
-	instances, e := l.LoadInstances()
-	if e != nil {
-		return nil, e
-	}
-
-	result := make([]*instance.Instance, len(instances))
-	i := 0
-	for _, inst := range instances {
-		result[i] = inst
-		i++
-	}
-
-	sort.Slice(result, func(i, j int) bool {
-		return result[i].LastUsed.After(result[j].LastUsed)
-	})
-
-	return result, nil
-}
-
-func (l *Launcher) LoadInstances() (map[string]*instance.Instance, error) {
-	instances := map[string]*instance.Instance{}
-	defer initializeInstances(l, instances)
-
-	path := files.MustFile(l.AppDir, "instances.json")
-	e := files.ParseJsonAt(path, &instances)
-	if e != nil {
-		e := l.SaveInstances(instances)
-		if e != nil {
-			return nil, e
-		}
-	}
-
-	return instances, nil
-}
-
-func (l *Launcher) SaveInstances(instances map[string]*instance.Instance) error {
-	path := files.MustFile(l.AppDir, "instances.json")
-	e := files.WriteJsonAt(path, &instances)
-	if e != nil {
-		return e
-	}
-	return nil
 }
 
 func (l *Launcher) SaveInstance(i *instance.Instance) error {
@@ -190,10 +118,4 @@ func (l *Launcher) SaveInstance(i *instance.Instance) error {
 	}
 	instances[i.Name] = i
 	return l.SaveInstances(instances)
-}
-
-func initializeInstances(l *Launcher, i map[string]*instance.Instance) {
-	for _, v := range i {
-		v.AppDir = l.AppDir
-	}
 }
