@@ -63,7 +63,7 @@ Any files or sub-folders within an optional directory become dependent on that o
 repository:
 /pack/_Optional Library Mod/mods/OptionalLibraryMod.jar
 /pack/_Optional Library Mod/_Optional_Dependant_Mod/mods/OptionalDependantMod.jar
-/pack/_Optional Library Mod/_Optional_Dependant_Mod`/resourcepacks/DependantModResourcepack.zip
+/pack/_Optional Library Mod/_Optional_Dependant_Mod/resourcepacks/DependantModResourcepack.zip
 
 instance:
 ../mods/OptionalLibraryMod.jar
