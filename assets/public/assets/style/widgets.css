@@ -120,3 +120,25 @@ input[type="checkbox"]:checked + .switch {
 input[type="checkbox"]:checked + .switch:before {
     transform: translateX(100%);
 }
+
+/**
+ * LOADER
+ */
+.loader {
+    display: block;
+    color: #eee;
+    text-align: center;
+    font-size: xx-large;
+    padding: 10%;
+    margin: auto;
+    animation: blink 2s ease infinite;
+}
+
+@keyframes blink {
+    0%, 100% {
+        opacity: 0.3;
+    }
+    50% {
+        opacity: 0.8;
+    }
+}

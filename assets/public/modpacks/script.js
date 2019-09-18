@@ -1,8 +1,5 @@
 function renderModpacks(modpacks) {
-    var list = document.getElementById("modpacks");
-    while (list.lastChild) {
-        list.removeChild(list.lastChild);
-    }
+    var list = Utils.clear("modpacks");
 
     Utils.eachArr(modpacks, function (pack) {
         list.appendChild(modpack(pack));
