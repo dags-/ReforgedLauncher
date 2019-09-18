@@ -3,6 +3,7 @@ function renderSettings(settings) {
     header.innerText = settings["name"] + " (" + settings["mod_pack"]["repo"] + ")";
 
     var options = Utils.clear("options");
+    options.appendChild(autoUpdate(settings));
     options.appendChild(gameDir(settings));
     options.appendChild(coverImage(settings));
 
@@ -31,6 +32,27 @@ function renderSettings(settings) {
     refresh(settings["options"]);
 
     Render.redraw(document.body);
+}
+
+function autoUpdate(settings) {
+    return Render.el("label", {for: "autoupdate", class: "option theme-row"}, [
+        Render.el("div", {class: "expand"}, [
+            Render.el("div", {class: "text"}, [Render.text("Check For Updates")])
+        ]),
+        Render.el("div", {class: "switch-container"}, [
+            Render.el("input", {
+                id: "autoupdate",
+                type: "checkbox",
+                checked: settings["auto_update"],
+                events: {
+                    change: function () {
+                        settings["auto_update"] = this.checked;
+                    }
+                }
+            }),
+            Render.el("span", {class: "switch"})
+        ]),
+    ]);
 }
 
 function gameDir(settings) {
