@@ -10,6 +10,7 @@ type Config struct {
 	WindowHeight int    `json:"window_height"`
 	LastURL      string `json:"last_url"`
 	AutoLaunch   bool   `json:"auto_launch"`
+	HomeScale    int    `json:"home_scale"`
 }
 
 func FirstLoad(appDir, addr string) *Config {

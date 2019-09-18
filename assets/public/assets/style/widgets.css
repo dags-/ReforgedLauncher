@@ -38,6 +38,37 @@ input[type="button"]:active {
     box-shadow: 0 0 5px 0 rgba(255, 255, 255, 0.5) inset;
 }
 
+input[type="range"] {
+    height: 5px;
+    padding: 0;
+    width: 100%;
+    background: transparent;
+    box-shadow: none !important;
+}
+
+input[type="range"]::-ms-track {
+    height: 3px;
+    color: transparent;
+    border-color: transparent;
+    background-color: #222;
+}
+
+input[type="range"]::-ms-thumb {
+    height: 0.5em !important;
+    width: 0.5em !important;
+    border-radius: 50%;
+    background: #ffffff;
+}
+
+input[type="range"]::-ms-fill-lower {
+    height: 3px;
+    background: #777;
+}
+
+input[type="range"]::-ms-tooltip {
+    display: none;
+}
+
 /**
  * CHECKBOX
  */
