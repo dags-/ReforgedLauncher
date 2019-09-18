@@ -25,14 +25,15 @@ type Meta struct {
 }
 
 type Instance struct {
-	Name      string           `json:"name"`
-	UserImage string           `json:"image"`
-	RepoImage string           `json:"repo_image"`
-	GameDir   string           `json:"game_dir"`
-	LastUsed  time.Time        `json:"last_used"`
-	ModPack   *modpack.ModPack `json:"mod_pack"`
-	Options   *pack.Options    `json:"options"`
-	AppDir    string           `json:"-"`
+	Name       string           `json:"name"`
+	UserImage  string           `json:"image"`
+	RepoImage  string           `json:"repo_image"`
+	GameDir    string           `json:"game_dir"`
+	AutoUpdate bool             `json:"auto_update"`
+	LastUsed   time.Time        `json:"last_used"`
+	ModPack    *modpack.ModPack `json:"mod_pack"`
+	Options    *pack.Options    `json:"options"`
+	AppDir     string           `json:"-"`
 }
 
 func (i *Instance) Installation(repository *repo.Repository) *modpack.Installation {

@@ -55,6 +55,7 @@ func (l *Launcher) postInstance(w http.ResponseWriter, r *http.Request) {
 			inst.GameDir = opts.GameDir
 			inst.Options = opts.Options
 			inst.UserImage = opts.UserImage
+			inst.AutoUpdate = opts.AutoUpdate
 			e = l.SaveInstance(inst)
 			if e == nil {
 				success(w, nil)
@@ -101,13 +102,14 @@ func (l *Launcher) Instance(id string) (*instance.Instance, error) {
 
 func (l *Launcher) NewInstance(id string, remote *modpack.Remote) *instance.Instance {
 	return &instance.Instance{
-		Name:      id,
-		Options:   nil,
-		AppDir:    l.AppDir,
-		ModPack:   remote.AsModPack(),
-		LastUsed:  time.Now(),
-		GameDir:   instance.DefaultGameDir(id),
-		RepoImage: remote.Repo().CoverImage(),
+		Name:       id,
+		Options:    nil,
+		AppDir:     l.AppDir,
+		AutoUpdate: true,
+		ModPack:    remote.AsModPack(),
+		LastUsed:   time.Now(),
+		GameDir:    instance.DefaultGameDir(id),
+		RepoImage:  remote.Repo().CoverImage(),
 	}
 }
 

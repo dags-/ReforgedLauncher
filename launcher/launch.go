@@ -30,8 +30,10 @@ func (l *Launcher) Launch(id string) {
 		return
 	}
 
-	listener.Stat("Checking for updates", 0.3)
-	l.Update(instance)
+	if instance.AutoUpdate {
+		listener.Stat("Checking for updates", 0.3)
+		l.Update(instance)
+	}
 
 	// make sure pack is downloaded
 	listener.Stat("Installing modpack", 0.4)
