@@ -21,7 +21,7 @@ jobs:
 
       - name: Build
         run: |
-          go get -u github.com/dags-/bundler
+          go get -u github.com/dags-/bundler@HEAD
           go run github.com/dags-/bundler -native
       - uses: actions/upload-artifact@master
         with:
@@ -47,7 +47,7 @@ jobs:
 
       - name: Build
         run: |
-          go get -u github.com/dags-/bundler
+          go get -u github.com/dags-/bundler@HEAD
           go run github.com/dags-/bundler -native
       - uses: actions/upload-artifact@master
         with:
@@ -80,7 +80,7 @@ jobs:
 
       - name: Build
         run: |
-          go get -u github.com/dags-/bundler
+          go get -u github.com/dags-/bundler@HEAD
           go run github.com/dags-/bundler -native
       - uses: actions/upload-artifact@master
         with:
