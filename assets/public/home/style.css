@@ -47,6 +47,7 @@
 .instance-container {
     flex-basis: 33.33%;
     height: 40vw;
+    font-size: 33.33%;
 }
 
 .instance {
@@ -97,12 +98,15 @@
     min-height: 50px;
     padding: 2vh;
     box-sizing: border-box;
-    font-size: 16px;
     background-color: rgba(0, 0, 0, 0.5);
 }
 
-.instance-info .subtitle {
-    font-size: 12px;
+.instance-info .text {
+    font-size: 3em;
+}
+
+.instance-info .sub-text {
+    font-size: 2em;
 }
 
 .instance-add-container {

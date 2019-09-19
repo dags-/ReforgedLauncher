@@ -63,6 +63,7 @@ function setScale(scale) {
     var els = document.getElementsByClassName("instance-container");
     Utils.eachArr(els, function (el) {
         el.style.flexBasis = width;
+        el.style.fontSize = width;
         el.style.height = height;
     });
 }

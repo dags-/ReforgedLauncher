@@ -24,6 +24,7 @@ func Load(appDir string) *Config {
 	config := &Config{
 		WindowWidth:  800,
 		WindowHeight: 480,
+		HomeScale:    7,
 		AutoLaunch:   true,
 	}
 	path := files.MustFile(appDir, "config.json")
