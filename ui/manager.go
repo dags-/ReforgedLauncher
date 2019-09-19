@@ -82,7 +82,7 @@ func (m *Manager) Progress(path string) {
 	e := m.Attach(&Settings{
 		Url:        "/progress#" + path,
 		Width:      800,
-		Height:     420,
+		Height:     480,
 		Borderless: true,
 	})
 	errs.Log("Attach window", e)
