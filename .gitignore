@@ -12,3 +12,4 @@
 *.out
 .builds/
 rice-box.go
+go.sum

@@ -14,7 +14,7 @@ input:hover {
  * BUTTONS
  */
 .primary {
-    color: white;
+    color: #eee;
     background-color: rgb(50, 180, 80);
 }
 
@@ -23,9 +23,9 @@ input:hover {
     background-color: rgb(180, 180, 180);
 }
 
-.warning {
-    color: white;
-    background-color: rgb(200, 60, 30);
+.tertiary {
+    color: #aaa;
+    background-color: rgb(80, 80, 80);
 }
 
 input[type="button"] {
