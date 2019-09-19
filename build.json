@@ -1,10 +1,10 @@
 {
   "name": "ReforgedLauncher",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "identifier": "com.conquestreforged.launcher",
   "output": ".builds",
   "setup": [
-    "go get github.com/josephspurrier/goversioninfo",
+    "go get github.com/josephspurrier/goversioninfo/cmd/goversioninfo",
     "go get github.com/GeertJohan/go.rice",
     "go get github.com/GeertJohan/go.rice/rice",
     "go run github.com/GeertJohan/go.rice/rice embed-go"
