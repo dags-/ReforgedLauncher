@@ -37,7 +37,7 @@ function renderSettings(settings) {
 function autoUpdate(settings) {
     return Render.el("label", {for: "autoupdate", class: "option theme-row"}, [
         Render.el("div", {class: "expand"}, [
-            Render.el("div", {class: "text"}, [Render.text("Check For Updates")])
+            Render.el("div", {class: "text"}, [Render.text("Automatic Updates")])
         ]),
         Render.el("div", {class: "switch-container"}, [
             Render.el("input", {
@@ -90,7 +90,7 @@ function coverImage(settings) {
             ]),
             Render.el("div", {class: "row"}, [
                 Render.el("input", {
-                    id: "coverImage", type: "text", value: settings["image"], events: {
+                    id: "coverImage", type: "text", value: settings["image"], placeholder: "Image URL", events: {
                         change: function () {
                             settings["image"] = this.value;
                         }
@@ -128,7 +128,7 @@ function removeButton(settings) {
     return Render.el("div", {class: "option theme-row"}, [
         Render.el("div", {class: "button-container"}, [
             Render.el("input", {
-                type: "button", class: "warning", value: "Remove Instance", events: {
+                type: "button", class: "tertiary", value: "Remove Instance", events: {
                     click: function () {
                         var path = "/api/instance/" + settings["name"];
                         del(path, function () {

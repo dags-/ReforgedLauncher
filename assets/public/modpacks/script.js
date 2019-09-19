@@ -10,7 +10,7 @@ function renderModpacks(modpacks) {
     });
 
     document.getElementById("add").addEventListener("click", function() {
-        document.body.appendChild(inputDialog("", function(text) {
+        document.body.appendChild(inputDialog("", "Custom/ModPack", function(text) {
             post("/api/modpacks", JSON.stringify(text), function(result) {
                 if (result.success) {
                     nav("/modpacks")
@@ -30,7 +30,7 @@ function modpack(pack) {
             Render.el("input", {
                 type: "button", class: "primary", value: "Install", events: {
                     click: function () {
-                        document.body.appendChild(inputDialog(pack["title"] || pack["name"], function(text) {
+                        document.body.appendChild(inputDialog(pack["title"] || pack["name"], "Custom Name", function(text) {
                             post("/api/install/" + pack["repo"], JSON.stringify({name: text}));
                         }));
                     }
@@ -40,10 +40,10 @@ function modpack(pack) {
     ]);
 }
 
-function inputDialog(value, callback) {
+function inputDialog(value, placeholder, callback) {
     return Render.el("div", {id: "dialog", class: "input-dialog"}, [
         Render.el("div", {class: "input-container"}, [
-            Render.el("input", {type: "text", id: "dialog-input", value: value}),
+            Render.el("input", {type: "text", id: "dialog-input", value: value, placeholder: placeholder}),
             Render.el("div", {}, [
                 Render.el("input", {
                     type: "button", class: "secondary", value: "Cancel", events: {
