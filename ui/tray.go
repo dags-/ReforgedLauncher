@@ -6,6 +6,7 @@ import (
 
 	"github.com/dags-/systray"
 
+	"github.com/Conquest-Reforged/ReforgedLauncher/metainfo"
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/errs"
 	"github.com/Conquest-Reforged/ReforgedLauncher/utils/tasks"
 )
@@ -23,9 +24,14 @@ func (m *Manager) ready() {
 		errs.Log("Load icon", e)
 	}
 
+	info := systray.AddMenuItem(metainfo.NAME+" v"+metainfo.VERSION, "")
+	info.Disable()
+	systray.AddSeparator()
 	auto := systray.AddMenuItem("Quick Launch", "")
-	open := systray.AddMenuItem("Open", "")
+	systray.AddSeparator()
 	launch := systray.AddMenuItem("Launch", "")
+	open := systray.AddMenuItem("Open", "")
+	systray.AddSeparator()
 	exit := systray.AddMenuItem("Quit", "")
 
 	if Load(m.appDir).AutoLaunch {
