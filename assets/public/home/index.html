@@ -35,7 +35,11 @@
 </body>
 <script>
     get("/api/instances", function(result) {
-        renderModpacks(result["data"]);
+        if (result["success"]) {
+            renderModpacks(result["data"]);
+        } else {
+            alert(result["data"]);
+        }
     });
     get("/api/home/scale", function(result) {
         loadScale(result["data"]);
