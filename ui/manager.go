@@ -26,7 +26,7 @@ type Manager struct {
 
 func NewManager(appDir, name string, box *rice.Box) *Manager {
 	mux := http.NewServeMux()
-	mux.Handle("/", http.FileServer(box.HTTPBox()))
+	mux.Handle("/", wrapHandler(http.FileServer(box.HTTPBox())))
 	return &Manager{
 		lock:   &sync.RWMutex{},
 		mux:    mux,
